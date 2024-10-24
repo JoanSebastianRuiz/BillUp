@@ -4,7 +4,7 @@ import { UsuarioContext } from "../context/UsuarioContext";
 
 export const EliminarUsuario = () =>{
     const {setIdUsuario, setEstado} = useContext(UsuarioContext);
-    setEstado(false);
+    
 
     return (
         <>
@@ -12,7 +12,9 @@ export const EliminarUsuario = () =>{
             <form onSubmit={e=>e.preventDefault()}>
                 <label htmlFor="idUsuario">Id de usuario</label>
                 <input onChange={e=>setIdUsuario(e.target.value )} id="idUsuario" name="idUsuario" type="text" placeholder="Ingrese el id del usuario que desea eliminar" />
-                <button>Eliminar</button>
+                <button onClick={()=>{
+                    setEstado(false);
+                }}>Eliminar</button>
             </form>
         </>
     );

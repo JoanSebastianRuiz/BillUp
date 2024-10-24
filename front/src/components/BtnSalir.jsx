@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { FirstContext } from "../context/FirstContext";
 
-export const BtnSalir = () =>{
+export const BtnSalir = ({classBoton}) =>{
     const {salir} = useContext(FirstContext)
 
     return (
-        <button onClick={()=>salir()}>Salir</button>
+        <button className={classBoton} onClick={()=>salir()}>Salir</button>
     );
 }

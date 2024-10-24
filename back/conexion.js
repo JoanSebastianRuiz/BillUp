@@ -4,7 +4,7 @@ npm install pg
 
 */
 
-/* const {Pool} = require("pg");
+const {Pool} = require("pg");
 
 const pool = new Pool({
     user: "postgres",
@@ -22,15 +22,19 @@ const ejecutarQuery = async(query)=>{
         return res.rows;
     } catch (err){
         console.log(err);
-    } finally{
-        await pool.end();
     }
 }
 
-module.exports.ejecutarQuery=ejecutarQuery; */
+const finalizarPool = async () => {
+  await pool.end();
+  console.log("Pool cerrado");
+}
+
+module.exports.ejecutarQuery=ejecutarQuery;
+module.exports.finalizarPool=finalizarPool;
 
 
-const mysql = require('mysql2/promise');
+/* const mysql = require('mysql2/promise');
 
 async function connectToDatabase() {
   try {
@@ -67,4 +71,4 @@ async function ejecutarQuery(query) {
     }
   }
 
-  module.exports.ejecutarQuery=ejecutarQuery;
+  module.exports.ejecutarQuery=ejecutarQuery; */
