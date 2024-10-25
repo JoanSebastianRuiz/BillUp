@@ -14,6 +14,9 @@ export default {
       width:{
         "42": "170px"
       },
+      spacing: {
+        'calc-custom': 'calc(width - 2rem)', // nombre de la clase personalizada
+      },
       //screens para modificar breakpoints
     },
   },
