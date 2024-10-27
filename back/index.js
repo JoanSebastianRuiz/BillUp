@@ -24,6 +24,17 @@ app.get("/usuarios", async (req,res)=>{
 app.get("/departamentos", async (req,res)=>{
     const respuesta = await ejecutarQuery("SELECT * FROM departamento;");
     res.send(JSON.stringify(respuesta));
+});
+
+app.get("/municipios", async (req, res) => {
+    const departamento = req.query.departamento;
+    if (departamento){
+        const respuesta = await ejecutarQuery(`SELECT * FROM municipio WHERE id_depa=${parseInt(departamento)};`);
+        res.send(JSON.stringify(respuesta));
+    }
+    else{
+        res.status(400).send("Error: el departamento es un valor requerido");
+    }
 })
 
 app.post("/usuarios", async(req,res)=>{

@@ -9,7 +9,8 @@ import { LabelCrud } from "../Labels/LabelCrud";
 import { SelectCrud } from "../ElementosForm/SelectCrud";
 
 export const RegistrarUsuario = () => {
-    const {setEmpresa,
+    const {departamento,
+        setEmpresa,
         setNombre,
         setApellido,
         setTipoDocumento,
@@ -21,18 +22,31 @@ export const RegistrarUsuario = () => {
         setDireccion,
         setEstado,
         postUsuario,
-        getDepartamentos} = useContext(UsuarioContext);
+        getDepartamentos,
+        getMunicipios} = useContext(UsuarioContext);
 
-    const [departamentos,setDepartamentos]=useState([{"id_depa":1,"nombre_depa":"Santander"}]);
+    const [departamentos,setDepartamentos]=useState([]);
+    const [municipios,setMunicipios]=useState([{id_muni:1, nombre_muni:"Bucaramanga"}]);
 
     useEffect(()=>{
         const fetchDepartamentos = async () =>{
             const datosDepartamentos = await getDepartamentos();
             setDepartamentos(datosDepartamentos);
+            setDepartamento(datosDepartamentos[0].id_depa);
         }
         fetchDepartamentos();
-        
     },[]);
+
+    useEffect(()=>{
+        const fetchMunicipios = async () =>{
+            if (departamento){
+                const datosMunicipios = await getMunicipios(departamento);
+                setMunicipios(datosMunicipios);
+                setMunicipio(datosMunicipios[0].id_muni);
+            }
+        } 
+        fetchMunicipios();
+    },[departamento]);
 
     const inputClass="min-w-72 max-w-96 bg-slate-100 text-slate-500 rounded-xl focus:outline-none px-2 py-2";
 
@@ -94,7 +108,13 @@ export const RegistrarUsuario = () => {
 
                     <div className="flex flex-col gap-y-4">
                         <LabelCrud htmlFor="municipio" name="Municipio"></LabelCrud>
-                        <InputTextCrud onChange={e=>setMunicipio(e.target.value )} id="municipio" name="municipio" />
+                        <SelectCrud onChange={e=>setMunicipio(e.target.value )} id="municipio" name="municipio">
+                            {municipios.map((municipio)=>{
+                                return(
+                                    <option key={municipio.id_muni} value={municipio.id_muni}>{municipio.nombre_muni}</option>
+                                );
+                            })}
+                        </SelectCrud>
                     </div>
 
 

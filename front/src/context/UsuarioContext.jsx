@@ -36,6 +36,30 @@ export const UsuarioContextProvider = (props) =>{
             }
         } catch (e){
             console.log(e);
+            return [];
+        }
+    }
+
+    const getMunicipios = async (id_depa)=>{
+        const url = `http://localhost:5000/municipios?departamento=${id_depa}`;
+        const cabeceras = new Headers();
+        cabeceras.set("Content-type", "application/json");
+
+        const opciones = {
+            method: "GET",
+            headers: cabeceras
+        }
+
+        try{
+            const respuesta = await fetch(url, opciones);
+            if (respuesta.ok){
+                const datos = await respuesta.json();
+                console.log(datos);
+                return datos;
+            }
+        } catch (e){
+            console.log(e);
+            return [];
         }
     }
 
@@ -74,6 +98,7 @@ export const UsuarioContextProvider = (props) =>{
             }
         } catch (e){
             console.log(e);
+            return [];
         }
     }
 
@@ -107,7 +132,8 @@ export const UsuarioContextProvider = (props) =>{
                 setEstado,
     
                 postUsuario,
-                getDepartamentos
+                getDepartamentos,
+                getMunicipios
             }
         }>
             {props.children}
