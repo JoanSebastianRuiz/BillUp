@@ -1,7 +1,7 @@
 import { createContext, useState, useContext } from "react";
-import { CrearUsuario } from "../components/CrearUsuario";
+import { RegistrarUsuario } from "../components/RegistrarUsuario";
 import { EliminarUsuario } from "../components/EliminarUsuario";
-import { FirstContext } from "./FirstContext";
+import { AutenticacionContext } from "./AutenticacionContext";
 
 export const UsuarioContext = createContext();
 
@@ -20,10 +20,10 @@ export const UsuarioContextProvider = (props) =>{
     const [clave, setClave] = useState("");
     const [estado, setEstado] = useState(true);
 
-    const {setRender} = useContext(FirstContext);
+    const {setRender} = useContext(AutenticacionContext);
 
     const opcionCrearUsuario = () =>{
-        setRender(<CrearUsuario></CrearUsuario>);
+        setRender(<RegistrarUsuario></RegistrarUsuario>);
     }
 
     const opcionEliminarUsuario = () =>{

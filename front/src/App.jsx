@@ -1,28 +1,29 @@
+import { useContext, useEffect } from 'react';
+import { AutenticacionContext } from './context/AutenticacionContext';
+import {BrowserRouter, Routes, Route, Link, useNavigate} from "react-router-dom";
+
+//Importacion componentes
 import { Login } from './components/Login';
-import { useContext } from 'react';
-import { FirstContext } from './context/FirstContext';
-import { MenuUsuario } from './components/MenuUsuario';
-import { CrearUsuario } from './components/CrearUsuario';
+import { RegistrarUsuario } from './components/RegistrarUsuario';
+import { EliminarUsuario } from './components/EliminarUsuario';
+import {EditarUsuario} from "./components/EditarUsuario"
+import { RutaProtegida } from './components/RutaProtegidad';
 
 
 
 function App() {
-  const {login, render} = useContext(FirstContext);
-/*     
-if (!login){
-      return (
-        <>
-        <Login></Login>
-        </>
-      );
-    } else{
-      return (
-        <>
-          {render}
-        </>
-      );
-    } */
-  return <CrearUsuario ></CrearUsuario>
+
+
+  return(
+    <BrowserRouter>
+      <Routes>
+        <Route path="/usuarios/registrar" element={<RutaProtegida><RegistrarUsuario></RegistrarUsuario></RutaProtegida>}></Route>
+        <Route path='/usuarios/eliminar' element={<RutaProtegida><EliminarUsuario></EliminarUsuario></RutaProtegida>}></Route>
+        <Route path='/usuarios/editar' element={<RutaProtegida><EditarUsuario></EditarUsuario></RutaProtegida>}></Route>
+        <Route path='/' element={<Login></Login>}></Route>
+      </Routes>
+    </BrowserRouter>
+  );
   }
 
 export default App
