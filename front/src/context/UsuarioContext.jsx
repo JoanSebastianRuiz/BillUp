@@ -17,7 +17,27 @@ export const UsuarioContextProvider = (props) =>{
     const [clave, setClave] = useState("");
     const [estado, setEstado] = useState(true);
 
+    const getDepartamentos = async ()=>{
+        const url = "http://localhost:5000/departamentos";
+        const cabeceras = new Headers();
+        cabeceras.set("Content-type", "application/json");
 
+        const opciones = {
+            method: "GET",
+            headers: cabeceras
+        }
+
+        try{
+            const respuesta = await fetch(url, opciones);
+            if (respuesta.ok){
+                const datos = await respuesta.json();
+                console.log((datos));
+                return datos;
+            }
+        } catch (e){
+            console.log(e);
+        }
+    }
 
     const postUsuario = async () =>{
         const url = "http://localhost:5000/usuarios";
@@ -86,7 +106,8 @@ export const UsuarioContextProvider = (props) =>{
                 setDireccion,
                 setEstado,
     
-                postUsuario
+                postUsuario,
+                getDepartamentos
             }
         }>
             {props.children}

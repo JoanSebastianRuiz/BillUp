@@ -21,6 +21,11 @@ app.get("/usuarios", async (req,res)=>{
     res.send(JSON.stringify(respuesta));
 });
 
+app.get("/departamentos", async (req,res)=>{
+    const respuesta = await ejecutarQuery("SELECT * FROM departamento;");
+    res.send(JSON.stringify(respuesta));
+})
+
 app.post("/usuarios", async(req,res)=>{
     console.log(req.body);
 

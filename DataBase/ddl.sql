@@ -1,296 +1,330 @@
-create database billup;
-use billup;
+--create database billup;
+--use billup;
 
-create table pais(
-idPais int not null,
-nombrePais varchar(50) not null,
-isoAlfa2Pais varchar(2) not null,
-isoNumericoPais varchar(3) not null,
-primary key (idPais)
+DROP TABLE IF EXISTS gravamen_producto;
+DROP TABLE IF EXISTS detalle_venta;
+DROP TABLE IF EXISTS rol_usuario; 
+DROP TABLE IF EXISTS detalle_compra;
+DROP TABLE IF EXISTS tercero_producto;
+DROP TABLE IF EXISTS producto;
+DROP TABLE IF EXISTS medio_pago;
+DROP TABLE IF EXISTS venta;
+DROP TABLE IF EXISTS compra;
+DROP TABLE IF EXISTS movimiento;
+DROP TABLE IF EXISTS detalle_caja;
+DROP TABLE IF EXISTS tercero;
+DROP TABLE IF EXISTS usuario;
+DROP TABLE IF EXISTS caja;
+DROP TABLE IF EXISTS empresa;
+DROP TABLE IF EXISTS gravamen;
+DROP TABLE IF EXISTS tipo_medio_pago;
+DROP TABLE IF EXISTS ubicacion_venta;
+DROP TABLE IF EXISTS rol;
+DROP TABLE IF EXISTS regimen_contribuyente;
+DROP TABLE IF EXISTS tipo_persona;
+DROP TABLE IF EXISTS tipo_documento;
+DROP TABLE IF EXISTS municipio;
+DROP TABLE IF EXISTS departamento;
+DROP TABLE IF EXISTS pais;
+
+CREATE TABLE IF NOT EXISTS pais(
+id_pais int not null,
+nombre_pais varchar(50) not null,
+iso_alfa2_pais varchar(2) not null,
+iso_numerico_pais varchar(3) not null,
+primary key (id_pais)
 );
 
-create table departamento(
-idDepartamento int not null,
-nombreDepartamento varchar(50) not null,
-codDepartamento varchar(5) not null,
-primary key (idDepartamento)
+CREATE TABLE IF NOT EXISTS departamento(
+id_depa int not null,
+id_pais int not null,
+nombre_depa varchar(50) not null,
+codigo_depa varchar(5) not null,
+primary key (id_depa),
+foreign key (id_pais) references pais (id_pais)
 );
 
-create table municipio(
-idMunicipio int not null,
-nombreMunicipio varchar(50) not null,
-codMunicipio varchar(5) not null,
-primary key (idMunicipio)
+CREATE TABLE IF NOT EXISTS municipio(
+id_muni int not null,
+id_depa int not null,
+nombre_muni varchar(50) not null,
+codigo_muni varchar(5) not null,
+primary key (id_muni),
+foreign key (id_depa) references departamento (id_depa)
 );
 
-create table tipoDocumento(
-idTipoDocumento int not null,
-nombreTipoDocumento varchar(50) not null,
-abreviaturaTipoDocumento varchar(5) not null,
-estadoTipoDocumento int not null,
-primary key (idTipoDocumento)
+CREATE TABLE IF NOT EXISTS tipo_documento(
+id_tipo_docu int not null,
+nombre_tipo_docu varchar(50) not null,
+abreviatura_tipo_docu varchar(5) not null,
+estado_Tipo_docu boolean not null,
+primary key (id_tipo_docu)
 );
 
-create table tipoPersona(
-idTipoPersona int not null,
-tipoPersona varchar(20),
-primary key (idTipoPersona)
+CREATE TABLE IF NOT EXISTS tipo_persona(
+id_tipo_pers int not null,
+tipo_pers varchar(20),
+primary key (id_tipo_Pers)
 );
 
-create table regimenContribuyente(
-idRegimenContribuyente int not null,
-nombreRegimenContribuyente varchar(30) not null,
-responsabilidadRegimenContribuyente varchar(10) not null,
-primary key (idRegimenContribuyente)
+CREATE TABLE IF NOT EXISTS regimen_contribuyente(
+id_regi_cont int not null,
+nombre_regi_cont varchar(30) not null,
+responsabilidad_regi_cont varchar(10) not null,
+primary key (id_regi_cont)
 );
 
-create table rol(
-idRol int not null,
-nombreRol varchar(50) not null,
-estadoRol int not null,
-primary key (idRol)
+CREATE TABLE IF NOT EXISTS rol(
+id_rol int not null,
+nombre_rol varchar(50) not null,
+estado_rol boolean not null,
+primary key (id_rol)
 );
 
-create table ubicacionVenta(
-idUbicacionVenta int not null,
-nombreUbicacionVenta varchar(50) not null,
-estadoUbicacionVenta int not null,
-primary key (idUbicacionVenta)
+CREATE TABLE IF NOT EXISTS ubicacion_venta(
+id_ubic_venta int not null,
+nombre_ubic_venta varchar(50) not null,
+estado_ubic_venta boolean not null,
+primary key (id_ubic_venta)
 );
 
-create table tipoMedioPago(
-idTipoMedioPago int not null,
-nombreTipoMedioPago varchar(50) not null,
-estadoTipoMedioPago int not null,
-primary key (idTipoMedioPago)
+CREATE TABLE IF NOT EXISTS tipo_medio_pago(
+id_tipo_medio_pago int not null,
+nombre_tipo_medio_pago varchar(50) not null,
+estado_tipo_medio_pago boolean not null,
+primary key (id_tipo_medio_pago)
 );
 
-create table gravamen(
-idGravamen int not null,
-nombreGravamen varchar(50) not null,
-estadoGravamen int not null,
-negativoGravamen int not null,
-porcentajeGravamen double not null,
-primary key (idGravamen)
+CREATE TABLE IF NOT EXISTS gravamen(
+id_grav int not null,
+nombre_grav varchar(50) not null,
+estado_grav boolean not null,
+negativo_grav boolean not null,
+porcentaje_grav float not null,
+primary key (id_grav)
 );
 
-create table empresa (
-idEmpresa int not null,
-idTipoPersonaEmpresa int not null,
-idregimenContribuyenteEmpresa int not null,
-idPaisEmpresa int not null,
-idPaisEmpresa int not null,
-idDepartamentoEmpresa int not null,
-idMunicipioEmpresa int not null,
-nitEmpresa varchar(15) not null,
-digitoVerificacionEmpresa varchar(3) not null,
-nombreEmpresa varchar(250) not null,
-razonSocialEmpresa varchar(250) not null,
-direccionEmpresa varchar(250) not null,
-codigoPostalEmpresa varchar(10) not null,
-telefonoEmpresa varchar(15) not null,
-correoEmpresa varchar(250) not null,
-logoEmpresa varchar(150) not null,
-estadoEmpresa int not null,
-primary key (idEmpresa),
-foreign key (idTipoPersonaEmpresa) references tipoPersona (idTipoPersona),
-foreign key (idregimenContribuyenteEmpresa) references regimenContribuyente (idRegimenContribuyente),
-foreign key (idPaisEmpresa) references pais (idPais),
-foreign key (idDepartamentoEmpresa) references departamento (idDepartamento),
-foreign key (idMunicipioEmpresa) references municipio (idMunicipio)
+CREATE TABLE IF NOT EXISTS categoria(
+id_cate int not null,
+nombre_cate varchar(50) not null,
+estado_cate boolean not null,
+primary key (id_cate)
 );
 
-create table caja(
-idCaja int not null,
-idEmpresaCaja int not null,
-nombreCaja varchar(20) not null,
-estadoCaja int not null,
-primary key (idCaja),
-foreign key (idEmpresaCaja) references empresa (idEmpresa)
+CREATE TABLE IF NOT EXISTS empresa (
+id_empre int not null,
+id_tipo_pers int not null,
+id_regi_cont int not null,
+id_muni int not null,
+nit_empre varchar(15) not null,
+digito_verificacion_empre varchar(3) not null,
+nombre_empre varchar(250) not null,
+razon_social_empre varchar(250) not null,
+direccion_empre varchar(250) not null,
+codigo_postal_empre varchar(10) not null,
+telefono_empre varchar(15) not null,
+correo_empre varchar(250) not null,
+logo_empre varchar(150) not null,
+estado_empre boolean not null,
+primary key (id_empre),
+foreign key (id_tipo_pers) references tipo_persona (id_tipo_pers),
+foreign key (id_regi_cont) references regimen_contribuyente (id_regi_cont),
+foreign key (id_muni) references municipio (id_muni)
 );
 
-create table usuario(
-idUsuario int not null,
-idEmpresaUsuario int not null,
-idTipoDocumentoUsuario int not null,
-idDepartamentoUsuario int not null,
-idMunicipioUsuario int not null,
-numeroDocumentoUsuario varchar(15) not null,
-nombreUsuario varchar(100) not null,
-apellidoUsuario varchar(100) not null,
-correoUsuario varchar(250) not null,
-telefonoUsuario varchar(15) not null,
-direccionUsuario varchar(250) not null,
-claveUsuario varchar(50) not null,
-estadoUsuario boolean not null,
-primary key (idUsuario),
-foreign key (idEmpresaUsuario) references empresa (idEmpresa),
-foreign key (idTipoDocumentoUsuario) references tipoDocumento (idTipoDocumento),
-foreign key (idDepartamentoUsuario) references departamento (idDepartamento),
-foreign key (idMunicipioUsuario) references municipio (idMunicipio)
+CREATE TABLE IF NOT EXISTS caja(
+id_caja int not null,
+id_empre int not null,
+nombre_caja varchar(20) not null,
+estado_caja boolean not null,
+primary key (id_caja),
+foreign key (id_empre) references empresa (id_empre)
 );
 
-create table tercero(
-idTercero int not null,
-idEmpresaTercero int not null,
-idTipoPersonaTercero int not null,
-idTipoDocumentoTercero int not null,
-idDepartamentoTercero int not null,
-idMunicipioTercero int not null,
-digitoVerificacionTercero varchar(3) not null,
-razonSocialTercero varchar(250) not null,
-numeroDocumentoTercero varchar(15) not null,
-nombreTercero varchar(100) not null,
-apellidoTercero varchar(100) not null,
-telefonoTercero varchar(15) not null,
-correoTercero varchar(250) not null,
-codigoPostalTercero varchar(10) not null,
-proveedorTercero int not null,
-primary key (idTercero),
-foreign key (idEmpresaTercero) references empresa (idEmpresa),
-foreign key (idTipoPersonaTercero) references tipoPersona (idTipoPersona),
-foreign key (idTipoDocumentoTercero) references tipoDocumento (idTipoDocumento),
-foreign key (idDepartamentoTercero) references departamento (idDepartamento),
-foreign key (idMunicipioTercero) references municipio (idMunicipio)
+CREATE TABLE IF NOT EXISTS usuario(
+id_usua int not null,
+id_empre int not null,
+id_tipo_docu int not null,
+id_muni int not null,
+numero_documento_usua varchar(15) not null,
+nombre_usua varchar(100) not null,
+apellido_usua varchar(100) not null,
+correo_usua varchar(250) not null,
+telefono_usua varchar(15) not null,
+direccion_usua varchar(250) not null,
+clave_usua varchar(50) not null,
+estado_usua boolean not null,
+primary key (id_usua),
+foreign key (id_empre) references empresa (id_empre),
+foreign key (id_tipo_docu) references tipo_documento (id_tipo_docu),
+foreign key (id_muni) references municipio (id_muni)
 );
 
-create table detalleCaja(
-idDetalleCaja int not null,
-idCajaDetalleCaja int not null,
-idUsuarioDetalleCaja int not null,
-fechaAperturaDetalleCaja date not null,
-horaAperturaDetalleCaja time not null,
-fechaCierreDetalleCaja date not null,
-horaCierreDetalleCaja time not null,
-dineroAperturaDetalleCaja float not null,
-dineroCierreDetalleCaja float not null,
-primary key (idDetalleCaja),
-foreign key (idCajaDetalleCaja) references caja (idCaja),
-foreign key (idUsuarioDetalleCaja) references usuario (idUsuario)
+CREATE TABLE IF NOT EXISTS tercero(
+id_terc int not null,
+id_empre int not null,
+id_tipo_pers int not null,
+id_tipo_docu int not null,
+id_muni int not null,
+digito_verificacion_terc varchar(3) not null,
+razon_social_terc varchar(250) not null,
+numero_documento_terc varchar(15) not null,
+nombre_terc varchar(100) not null,
+apellido_terc varchar(100) not null,
+telefono_terc varchar(15) not null,
+correo_terc varchar(250) not null,
+codigo_postal_terc varchar(10) not null,
+proveedor_terc boolean not null,
+estado_terc boolean not null,
+primary key (id_terc),
+foreign key (id_empre) references empresa (id_empre),
+foreign key (id_tipo_pers) references tipo_persona (id_tipo_pers),
+foreign key (id_tipo_docu) references tipo_documento (id_tipo_docu),
+foreign key (id_muni) references municipio (id_muni)
 );
 
-create table movimiento(
-idMovimiento int not null,
-idUsuarioMovimiento int not null,
-idCajaMovimiento int not null,
-descripcionMovimiento varchar(250) not null,
-fechaMovimiento date not null,
-horaMovimiento time not null,
-valorMovimiento float not null,
-tipoMovimiento int not null,
-primary key (idMovimiento),
-foreign key (idUsuarioMovimiento) references usuario (idUsuario),
-foreign key (idCajaMovimiento) references caja (idCaja)
+CREATE TABLE IF NOT EXISTS detalle_caja(
+id_deta_caja int not null,
+id_caja int not null,
+id_usua int not null,
+fecha_aper_deta_caja TIMESTAMP not null,
+fecha_cier_deta_caja TIMESTAMP not null,
+dine_aper_deta_caja double precision not null,
+dine_cier_deta_caja double precision not null,
+primary key (id_deta_caja),
+foreign key (id_caja) references caja (id_caja),
+foreign key (id_Usua) references usuario (id_Usua)
 );
 
-create table compra(
-idCompra int not null,
-idTerceroCompra int not null,
-idUsuarioCompra int not null,
-fechaCompra date not null,
-horaCompra time not null,
-observacionCompra varchar(250) not null,
-primary key (idCompra),
-foreign key (idTerceroCompra) references tercero (idTercero),
-foreign key (idUsuarioCompra) references usuario (idUsuario)
+CREATE TABLE IF NOT EXISTS movimiento(
+id_movi int not null,
+id_usua int not null,
+id_caja int not null,
+descripcion_movi varchar(250) not null,
+fecha_movi TIMESTAMP not null,
+valor_movi double precision not null,
+tipo_movi boolean not null,
+primary key (id_movi),
+foreign key (id_usua) references usuario (id_usua),
+foreign key (id_caja) references caja (id_caja)
+);
+
+CREATE TABLE IF NOT EXISTS compra(
+id_comp int not null,
+id_terc int not null,
+id_usua int not null,
+fecha_comp TIMESTAMP not null,
+observacion_comp varchar(250) not null,
+primary key (id_comp),
+foreign key (id_terc) references tercero (id_terc),
+foreign key (id_usua) references usuario (id_usua)
 ); 
 
-create table venta(
-idVenta int not null,
-idTerceroVenta int not null,
-idCajaVenta int not null,
-idUsuarioVenta int not null,
-idUbicacionVentaVenta int not null,
-fechaVenta date not null,
-horaVenta time not null,
-observacionVenta varchar(250) not null,
-primary key (idVenta),
-foreign key (idTerceroVenta) references tercero (idTercero),
-foreign key (idCajaVenta) references caja (idCaja),
-foreign key (idUsuarioVenta) references usuario (idUsuario),
-foreign key (idUbicacionVentaVenta) references ubicacionVenta (idUbicacionVenta)
+CREATE TABLE IF NOT EXISTS venta(
+id_venta int not null,
+id_terc int not null,
+id_caja int not null,
+id_usua int not null,
+id_ubic_venta int not null,
+fecha_venta TIMESTAMP not null,
+observacion_venta varchar(250) not null,
+primary key (id_venta),
+foreign key (id_terc) references tercero (id_terc),
+foreign key (id_caja) references caja (id_caja),
+foreign key (id_usua) references usuario (id_usua),
+foreign key (id_ubic_venta) references ubicacion_venta (id_ubic_venta)
 ); 
 
-create table medioPago(
-idMedioPago int not null,
-idVentaMedioPago int not null,
-idTipoMedioPagoMedioPago int not null,
-estadoMedioPago int not null,
-primary key (idMedioPago),
-foreign key (idVentaMedioPago) references venta (idVenta),
-foreign key (idTipoMedioPagoMedioPago) references tipoMedioPago (idTipoMedioPago)
+CREATE TABLE IF NOT EXISTS medio_pago(
+id_medio_pago int not null,
+id_venta int not null,
+id_tipo_medio_pago int not null,
+estado_medio_pago boolean not null,
+primary key (id_medio_pago),
+foreign key (id_venta) references venta (id_venta),
+foreign key (id_tipo_medio_pago) references tipo_medio_pago (id_tipo_medio_pago)
 );
 
-create table producto(
-idProducto int not null,
-idEmpresaProducto int not null,
-idGravamenProducto int not null,
-codigoBarrasProducto varchar(50) not null,
-nombreProducto varchar(50) not null,
-descripcionProducto varchar(250) not null,
-categoriaProducto varchar(50) not null,
-precioVentaProducto double not null,
-stockMinimoProducto double not null,
-stockMaximoProducto double not null,
-stockProducto double not null,
-primary key (idProducto),
-foreign key (idEmpresaProducto) references empresa (idEmpresa),
-foreign key (idGravamenProducto) references gravamen (idGravamen)
+CREATE TABLE IF NOT EXISTS producto(
+id_prod int not null,
+id_empre int not null,
+id_cate int not null,
+codigo_barras_prod varchar(50) not null,
+nombre_prod varchar(50) not null,
+descripcion_prod varchar(250) not null,
+precio_venta_prod double precision not null,
+stock_mini int not null,
+stock_maxi int not null,
+stock_prod int not null,
+estado_prod boolean not null,
+primary key (id_prod),
+foreign key (id_empre) references empresa (id_empre),
+foreign key (id_cate)  references categoria (id_cate)
 );
 
-create table terceroxProducto(
-idTerceroxProducto int not null,
-idTerceroTerceroxProducto int not null,
-idProductoTerceroxProducto int not null,
-precioCompraProductoTerceroxProducto float not null,
-primary key (idTerceroxProducto),
-foreign key (idTerceroTerceroxProducto) references tercero (idTercero),
-foreign key (idProductoTerceroxProducto) references producto (idProducto)
+CREATE TABLE IF NOT EXISTS tercero_producto(
+id_terc_prod int not null,
+id_terc int not null,
+id_prod int not null,
+precio_compra_terc_prod double precision not null,
+porcentaje_desc_deta_venta float not null,
+primary key (id_terc_prod),
+foreign key (id_terc) references tercero (id_terc),
+foreign key (id_prod) references producto (id_prod)
 );
 
-create table detalleCompra(
-idDetalleCompra int not null,
-idCompraDetalleCompra int not null,
-idProductoDetalleCompra int not null,
-cantidadDetalleCompra double not null,
-valorDetalleCompra float not null,
-fechaVencimientoDetalleCompra date not null,
-primary key (idDetalleCompra),
-foreign key (idCompraDetalleCompra) references compra (idCompra),
-foreign key (idProductoDetalleCompra) references producto (idProducto)
+CREATE TABLE IF NOT EXISTS detalle_compra(
+id_deta_comp int not null,
+id_Comp int not null,
+id_prod int not null,
+cantidad_deta_comp int not null,
+valor_deta_comp double precision not null,
+fecha_venc_deta_comp date not null,
+primary key (id_deta_comp),
+foreign key (id_Comp) references compra (id_Comp),
+foreign key (id_prod) references producto (id_prod)
 );
 
-create table rolUsuario(
-idRolUsuario int not null,
-idRolRolUsuario int not null,
-idUsuarioRolUsuario int not null,
-primary key (idRolUsuario),
-foreign key (idRolRolUsuario) references rol (idRol),
-foreign key (idUsuarioRolUsuario) references usuario (idUsuario)
+CREATE TABLE IF NOT EXISTS rol_usuario(
+id_rol_usua int not null,
+id_rol int not null,
+id_usua int not null,
+primary key (id_rol_usua),
+foreign key (id_rol) references rol (id_rol),
+foreign key (id_usua) references usuario (id_usua)
 );
 
-create table detalleVenta(
-idDetalleVenta int not null,
-idVentaDetalleVenta int not null,
-idProductoDetalleVenta int not null,
-idGravamenDetalleVenta int not null,
-cantidadDetalleVenta double not null,
-porcentajeDescuentoDetalleVenta double not null,
-valorDescuentoDetalleVenta double not null,
-valorTotalDetalleVenta double not null,
-primary key (idDetalleVenta),
-foreign key (idVentaDetalleVenta) references venta (idVenta),
-foreign key (idProductoDetalleVenta) references producto (idProducto),
-foreign key (idGravamenDetalleVenta) references gravamen (idGravamen)
+CREATE TABLE IF NOT EXISTS detalle_venta(
+id_deta_venta int not null,
+id_venta int not null,
+id_prod int not null,
+id_grav int not null,
+cantidad_deta_venta int not null,
+valor_desc_deta_venta double precision not null,
+valor_total_deta_venta double precision not null,
+primary key (id_deta_venta),
+foreign key (id_venta) references venta (id_venta),
+foreign key (id_prod) references producto (id_prod),
+foreign key (id_grav) references gravamen (id_grav)
 );
 
-create table gravamenxProducto(
-idGravamenxProducto int not null,
-idProductoGravamenxProducto int not null,
-idGravamenGravamenxProducto int not null,
-indicadorCompraGravamenxProducto int not null,
-indicadorVentaGravamenxProducto int not null,
-primary key (idGravamenxProducto),
-foreign key (idProductoGravamenxProducto) references producto (idProducto),
-foreign key (idGravamenGravamenxProducto) references gravamen (idGravamen)
+CREATE TABLE IF NOT EXISTS gravamen_producto(
+id_grav_prod int not null,
+id_prod int not null,
+id_grav int not null,
+indicador_Comp_grav_prod boolean not null,
+indicador_venta_grav_prod boolean not null,
+primary key (id_grav_prod),
+foreign key (id_prod) references producto (id_prod),
+foreign key (id_grav) references gravamen (id_grav)
+);
+
+CREATE TABLE IF NOT EXISTS historial(
+id_his  int not null,
+nom_tabla varchar not null,
+accion varchar not null,
+descripcion varchar not null,
+usuario varchar not null,
+fecha TIMESTAMP,
+primary key (id_his)
 );

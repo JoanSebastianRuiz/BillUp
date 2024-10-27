@@ -1,7 +1,12 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UsuarioContext } from "../../context/UsuarioContext";
 import { MenuUsuario } from "./MenuUsuario";
 import { BtnAccion } from "../Buttons/BtnAccion";
+import { InputTextCrud } from "../ElementosForm/InputTextCrud";
+import { InputNumberCrud } from "../ElementosForm/InputNumberCrud";
+import { InputEmailCrud } from "../ElementosForm/InputEmailCrud";
+import { LabelCrud } from "../Labels/LabelCrud";
+import { SelectCrud } from "../ElementosForm/SelectCrud";
 
 export const RegistrarUsuario = () => {
     const {setEmpresa,
@@ -15,10 +20,21 @@ export const RegistrarUsuario = () => {
         setTelefono,
         setDireccion,
         setEstado,
-        postUsuario} = useContext(UsuarioContext);
+        postUsuario,
+        getDepartamentos} = useContext(UsuarioContext);
 
-        const inputClass="min-w-72 max-w-96 bg-slate-100 text-slate-500 rounded-xl focus:outline-none px-2 py-2";
-        const labelClass="text-2xl font-bold text-slate-50";
+    const [departamentos,setDepartamentos]=useState([{"id_depa":1,"nombre_depa":"Santander"}]);
+
+    useEffect(()=>{
+        const fetchDepartamentos = async () =>{
+            const datosDepartamentos = await getDepartamentos();
+            setDepartamentos(datosDepartamentos);
+        }
+        fetchDepartamentos();
+        
+    },[]);
+
+    const inputClass="min-w-72 max-w-96 bg-slate-100 text-slate-500 rounded-xl focus:outline-none px-2 py-2";
 
 
     return (
@@ -29,29 +45,27 @@ export const RegistrarUsuario = () => {
             <form className=""  onSubmit={e=>e.preventDefault()}>
                 <div className="flex flex-wrap gap-y-10 gap-x-14 text-gray-200 w-7/12 mx-auto place-content-center relative mt-20 max-w-2xl place-self-center">
                     <div className="flex flex-col gap-y-4">
-                        <label className={labelClass} htmlFor="nombre">Empresa</label>
-
-                        <input className={inputClass} onChange={e=>setEmpresa(e.target.value )} id="empresa" name="empresa" type="text" placeholder="Ingrese la empresa del usuario" />
-
+                        <LabelCrud htmlFor="nombre" name="Empresa"></LabelCrud>
+                        <InputTextCrud onChange={e=>setEmpresa(e.target.value )} id="empresa" name="empresa"></InputTextCrud>
                     </div>
 
 
                     <div className="flex flex-col gap-y-4">
                         
-                        <label className={labelClass} htmlFor="nombre">Nombres</label>
-                        <input className={inputClass} onChange={e=>setNombre(e.target.value )} id="nombre" name="nombre" type="text" placeholder="Ingrese el nombre del usuario" />
+                        <LabelCrud htmlFor="nombre" name="Nombres"></LabelCrud>
+                        <InputTextCrud onChange={e=>setNombre(e.target.value )} id="nombre" name="nombre" />
 
                     </div>
 
 
                     <div className="flex flex-col gap-y-4">
-                        <label className={labelClass} htmlFor="apellido">Apellidos</label>
-                        <input className={inputClass} onChange={e=>setApellido(e.target.value )} id="apellido" name="apellido" type="text" placeholder="Ingrese el apellido del usuario" />
+                        <LabelCrud htmlFor="apellido" name="Apellidos"></LabelCrud>
+                        <InputTextCrud onChange={e=>setApellido(e.target.value )} id="apellido" name="apellido" />
                     </div>
 
 
                     <div className="flex flex-col gap-y-4">
-                        <label className={labelClass} htmlFor="tipoDocumento">Tipo de documento</label>
+                        <LabelCrud htmlFor="tipoDocumento" name="Tipo de documento"></LabelCrud>
                         <select className={inputClass} onChange={e=>setTipoDocumento(e.target.value )} name="tipoDocumento" id="tipoDocumento">
                             <option value="CC">C.C.</option>
                             <option value="CE">C.E.</option>
@@ -61,37 +75,43 @@ export const RegistrarUsuario = () => {
 
 
                     <div className="flex flex-col gap-y-4">
-                        <label className={labelClass} htmlFor="numeroDocumento">Numero de documento</label>
-                        <input className={inputClass} onChange={e=>setNumeroDocumento(e.target.value )} id="numeroDocumento" name="numeroDocumento" type="number" placeholder="Ingrese el numero del documento del usuario" />
+                        <LabelCrud htmlFor="numeroDocumento" name="Numero de documento"></LabelCrud>
+                        <InputNumberCrud onChange={e=>setNumeroDocumento(e.target.value )} id="numeroDocumento" name="numeroDocumento" />
                     </div>
 
 
                     <div className="flex flex-col gap-y-4">
-                        <label className={labelClass} htmlFor="departamento">Departamento</label>
-                        <input className={inputClass} onChange={e=>setDepartamento(e.target.value )} id="departamento" name="departamento" type="text" placeholder="Ingrese el departamento del usuario" />
+                        <LabelCrud htmlFor="departamento" name="Departamento"></LabelCrud>
+                        <SelectCrud onChange={e=>setDepartamento(e.target.value )} id="departamento" name="departamento">
+                            {departamentos.map((departamento)=>{
+                                return(
+                                    <option key={departamento.id_depa} value={departamento.id_depa}>{departamento.nombre_depa}</option>
+                                )
+                            })}
+                        </SelectCrud>
                     </div>
 
 
                     <div className="flex flex-col gap-y-4">
-                        <label className={labelClass} htmlFor="municipio">Municipio</label>
-                        <input className={inputClass} onChange={e=>setMunicipio(e.target.value )} id="municipio" name="municipio" type="text" placeholder="Ingrese el municipio del usuario" />
+                        <LabelCrud htmlFor="municipio" name="Municipio"></LabelCrud>
+                        <InputTextCrud onChange={e=>setMunicipio(e.target.value )} id="municipio" name="municipio" />
                     </div>
 
 
                     <div className="flex flex-col gap-y-4">
-                        <label className={labelClass} htmlFor="email">Email</label>
-                        <input className={inputClass} onChange={e=>setEmail(e.target.value )} id="email" name="email" type="email" placeholder="Ingrese el email del usuario" />
+                        <LabelCrud htmlFor="email" name="Email"></LabelCrud>
+                        <InputEmailCrud onChange={e=>setEmail(e.target.value )} id="email" name="email" />
                     </div>
 
 
                     <div className="flex flex-col gap-y-4">
-                        <label className={labelClass} htmlFor="telefono">Telefono</label>
-                        <input className={inputClass} onChange={e=>setTelefono(e.target.value )} id="telefono" name="telefono" type="number" placeholder="Ingrese el telefono del usuario" />
+                        <LabelCrud htmlFor="telefono" name="Telefono"></LabelCrud>
+                        <InputNumberCrud onChange={e=>setTelefono(e.target.value )} id="telefono" name="telefono" />
                     </div>
 
                     <div className="flex flex-col gap-y-4">
-                        <label className={labelClass} htmlFor="direccion">Direccion</label>
-                        <input className={inputClass} onChange={e=>setDireccion(e.target.value)} id="direccion" name="direccion" type="text" placeholder="Ingrese la direccion del usuario" />
+                        <LabelCrud htmlFor="direccion" name="Direccion"></LabelCrud>
+                        <InputTextCrud onChange={e=>setDireccion(e.target.value)} id="direccion" name="direccion" />
                     </div>
                 </div>
 

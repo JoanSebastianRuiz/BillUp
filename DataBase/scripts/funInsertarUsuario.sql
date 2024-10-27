@@ -8,7 +8,7 @@ $$
 		SELECT MAX(idUsuario) INTO id FROM Usuario;
 		id=id+1;
 		
-		INSERT INTO Usuario VALUES(id, _idEmpresaUsuario, _idTipoDocumentoUsuario, _idDepartamentoUsuario,
+		INSERT INTO Usuario VALUES(id, _idEmpresaUsuario, _idTipoDocumentoUsuario,
 		_idMunicipioUsuario, _numeroDocumentoUsuario, _nombreUsuario, _apellidoUsuario, _correoUsuario, _telefonoUsuario, 
 		_direccionUsuario, _claveUsuario, _estadoUsuario);
 
