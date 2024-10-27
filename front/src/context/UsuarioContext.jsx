@@ -1,7 +1,4 @@
 import { createContext, useState, useContext } from "react";
-import { RegistrarUsuario } from "../components/RegistrarUsuario";
-import { EliminarUsuario } from "../components/EliminarUsuario";
-import { AutenticacionContext } from "./AutenticacionContext";
 
 export const UsuarioContext = createContext();
 
@@ -20,15 +17,7 @@ export const UsuarioContextProvider = (props) =>{
     const [clave, setClave] = useState("");
     const [estado, setEstado] = useState(true);
 
-    const {setRender} = useContext(AutenticacionContext);
 
-    const opcionCrearUsuario = () =>{
-        setRender(<RegistrarUsuario></RegistrarUsuario>);
-    }
-
-    const opcionEliminarUsuario = () =>{
-        setRender(<EliminarUsuario></EliminarUsuario>);
-    }
 
     const postUsuario = async () =>{
         const url = "http://localhost:5000/usuarios";
@@ -97,8 +86,6 @@ export const UsuarioContextProvider = (props) =>{
                 setDireccion,
                 setEstado,
     
-                opcionCrearUsuario,
-                opcionEliminarUsuario,
                 postUsuario
             }
         }>

@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { UsuarioContext } from "../context/UsuarioContext";
+import { UsuarioContext } from "../../context/UsuarioContext";
 import { MenuUsuario } from "./MenuUsuario";
-import { BtnAccion } from "./BtnAccion";
+import { BtnAccion } from "../Buttons/BtnAccion";
 
 export const RegistrarUsuario = () => {
     const {setEmpresa,

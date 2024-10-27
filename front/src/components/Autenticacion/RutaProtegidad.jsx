@@ -1,4 +1,4 @@
-import { AutenticacionContext } from "../context/AutenticacionContext";
+import { AutenticacionContext } from "../../context/AutenticacionContext";
 import { Navigate } from "react-router-dom";
 import { useContext } from "react";
 

@@ -3,11 +3,11 @@ import { AutenticacionContext } from './context/AutenticacionContext';
 import {BrowserRouter, Routes, Route, Link, useNavigate} from "react-router-dom";
 
 //Importacion componentes
-import { Login } from './components/Login';
-import { RegistrarUsuario } from './components/RegistrarUsuario';
-import { EliminarUsuario } from './components/EliminarUsuario';
-import {EditarUsuario} from "./components/EditarUsuario"
-import { RutaProtegida } from './components/RutaProtegidad';
+import { Login } from './components/Autenticacion/Login';
+import { RegistrarUsuario } from './components/Usuario/RegistrarUsuario';
+import { EliminarUsuario } from './components/Usuario/EliminarUsuario';
+import {EditarUsuario} from "./components/Usuario/EditarUsuario"
+import { RutaProtegida } from './components/Autenticacion/RutaProtegidad';
 
 
 
