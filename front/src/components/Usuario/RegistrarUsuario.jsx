@@ -7,9 +7,16 @@ import { InputNumberCrud } from "../ElementosForm/InputNumberCrud";
 import { InputEmailCrud } from "../ElementosForm/InputEmailCrud";
 import { LabelCrud } from "../Labels/LabelCrud";
 import { SelectCrud } from "../ElementosForm/SelectCrud";
+import { ContenedorInputCrud } from "../ElementosForm/ContenedorInputCrud";
+import { ContenedorBtnAccion } from "../ElementosForm/ContenedorBtnAccion";
 
 export const RegistrarUsuario = () => {
-    const {departamento,
+    const {
+        departamento,
+        departamentos,
+        municipios,
+        tiposDocumento,
+
         setEmpresa,
         setNombre,
         setApellido,
@@ -21,12 +28,15 @@ export const RegistrarUsuario = () => {
         setTelefono,
         setDireccion,
         setEstado,
+        setDepartamentos,
+        setMunicipios,
+        setTiposDocumento,
+
         postUsuario,
         getDepartamentos,
-        getMunicipios} = useContext(UsuarioContext);
-
-    const [departamentos,setDepartamentos]=useState([]);
-    const [municipios,setMunicipios]=useState([{id_muni:1, nombre_muni:"Bucaramanga"}]);
+        getMunicipios,
+        getTiposDocumento
+    } = useContext(UsuarioContext);
 
     useEffect(()=>{
         const fetchDepartamentos = async () =>{
@@ -48,7 +58,14 @@ export const RegistrarUsuario = () => {
         fetchMunicipios();
     },[departamento]);
 
-    const inputClass="min-w-72 max-w-96 bg-slate-100 text-slate-500 rounded-xl focus:outline-none px-2 py-2";
+    useEffect(()=>{
+        const fetchTiposDocumento = async ()=>{
+            const datosTiposDocumento = await getTiposDocumento();
+            setTiposDocumento(datosTiposDocumento);
+            setTipoDocumento(datosTiposDocumento[0].id_tipo_docu)
+        }
+        fetchTiposDocumento();
+    },[]);
 
 
     return (
@@ -58,55 +75,56 @@ export const RegistrarUsuario = () => {
 
             <form className=""  onSubmit={e=>e.preventDefault()}>
                 <div className="flex flex-wrap gap-y-10 gap-x-14 text-gray-200 w-7/12 mx-auto place-content-center relative mt-20 max-w-2xl place-self-center">
-                    <div className="flex flex-col gap-y-4">
+
+                    <ContenedorInputCrud>
                         <LabelCrud htmlFor="nombre" name="Empresa"></LabelCrud>
                         <InputTextCrud onChange={e=>setEmpresa(e.target.value )} id="empresa" name="empresa"></InputTextCrud>
-                    </div>
+                    </ContenedorInputCrud>
 
 
-                    <div className="flex flex-col gap-y-4">
-                        
+                    <ContenedorInputCrud>  
                         <LabelCrud htmlFor="nombre" name="Nombres"></LabelCrud>
                         <InputTextCrud onChange={e=>setNombre(e.target.value )} id="nombre" name="nombre" />
+                    </ContenedorInputCrud>
 
-                    </div>
 
-
-                    <div className="flex flex-col gap-y-4">
+                    <ContenedorInputCrud>
                         <LabelCrud htmlFor="apellido" name="Apellidos"></LabelCrud>
                         <InputTextCrud onChange={e=>setApellido(e.target.value )} id="apellido" name="apellido" />
-                    </div>
+                    </ContenedorInputCrud>
 
 
-                    <div className="flex flex-col gap-y-4">
+                    <ContenedorInputCrud>
                         <LabelCrud htmlFor="tipoDocumento" name="Tipo de documento"></LabelCrud>
-                        <select className={inputClass} onChange={e=>setTipoDocumento(e.target.value )} name="tipoDocumento" id="tipoDocumento">
-                            <option value="CC">C.C.</option>
-                            <option value="CE">C.E.</option>
-                            <option value="PP">P.P.</option>
-                        </select>
-                    </div>
+                        <SelectCrud onChange={e=>setTipoDocumento(e.target.value )} name="tipoDocumento" id="tipoDocumento">
+                            {tiposDocumento.map(({id_tipo_docu,nombre_tipo_docu})=>{
+                                return(
+                                    <option key={id_tipo_docu} value={id_tipo_docu}>{nombre_tipo_docu}</option>
+                                );
+                            })}
+                        </SelectCrud>
+                    </ContenedorInputCrud>
 
 
-                    <div className="flex flex-col gap-y-4">
+                    <ContenedorInputCrud>
                         <LabelCrud htmlFor="numeroDocumento" name="Numero de documento"></LabelCrud>
                         <InputNumberCrud onChange={e=>setNumeroDocumento(e.target.value )} id="numeroDocumento" name="numeroDocumento" />
-                    </div>
+                    </ContenedorInputCrud>
 
 
-                    <div className="flex flex-col gap-y-4">
+                    <ContenedorInputCrud>
                         <LabelCrud htmlFor="departamento" name="Departamento"></LabelCrud>
                         <SelectCrud onChange={e=>setDepartamento(e.target.value )} id="departamento" name="departamento">
                             {departamentos.map((departamento)=>{
                                 return(
                                     <option key={departamento.id_depa} value={departamento.id_depa}>{departamento.nombre_depa}</option>
-                                )
+                                );
                             })}
                         </SelectCrud>
-                    </div>
+                    </ContenedorInputCrud>
 
 
-                    <div className="flex flex-col gap-y-4">
+                    <ContenedorInputCrud>
                         <LabelCrud htmlFor="municipio" name="Municipio"></LabelCrud>
                         <SelectCrud onChange={e=>setMunicipio(e.target.value )} id="municipio" name="municipio">
                             {municipios.map((municipio)=>{
@@ -115,31 +133,31 @@ export const RegistrarUsuario = () => {
                                 );
                             })}
                         </SelectCrud>
-                    </div>
+                    </ContenedorInputCrud>
 
 
-                    <div className="flex flex-col gap-y-4">
+                    <ContenedorInputCrud>
                         <LabelCrud htmlFor="email" name="Email"></LabelCrud>
                         <InputEmailCrud onChange={e=>setEmail(e.target.value )} id="email" name="email" />
-                    </div>
+                    </ContenedorInputCrud>
 
 
-                    <div className="flex flex-col gap-y-4">
+                    <ContenedorInputCrud>
                         <LabelCrud htmlFor="telefono" name="Telefono"></LabelCrud>
                         <InputNumberCrud onChange={e=>setTelefono(e.target.value )} id="telefono" name="telefono" />
-                    </div>
+                    </ContenedorInputCrud>
 
-                    <div className="flex flex-col gap-y-4">
+                    <ContenedorInputCrud>
                         <LabelCrud htmlFor="direccion" name="Direccion"></LabelCrud>
                         <InputTextCrud onChange={e=>setDireccion(e.target.value)} id="direccion" name="direccion" />
-                    </div>
+                    </ContenedorInputCrud>
                 </div>
 
-                <div className="mt-5 flex justify-center relative">
+                <ContenedorBtnAccion>
                     <BtnAccion name="Registrar" onClick={async ()=>{
                     setEstado(true);
                     await postUsuario();}}></BtnAccion>
-                </div>
+                </ContenedorBtnAccion>
                 
             </form>
 

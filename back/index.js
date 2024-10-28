@@ -35,6 +35,11 @@ app.get("/municipios", async (req, res) => {
     else{
         res.status(400).send("Error: el departamento es un valor requerido");
     }
+});
+
+app.get("/tiposDocumento", async(req,res)=>{
+    const respuesta = await ejecutarQuery("SELECT * FROM tipo_documento;");
+    res.json(respuesta);
 })
 
 app.post("/usuarios", async(req,res)=>{
@@ -56,7 +61,6 @@ app.post("/usuarios", async(req,res)=>{
     const respuesta = await ejecutarQuery(`SELECT insertarUsuario (
         ${parseInt(idempresausuario)},
         ${parseInt(idtipodocumentousuario)},
-        ${parseInt(iddepartamentousuario)},
         ${parseInt(idmunicipiousuario)},
         '${numerodocumentousuario}',
         '${nombreusuario}',

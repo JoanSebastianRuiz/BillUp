@@ -16,6 +16,9 @@ export const UsuarioContextProvider = (props) =>{
     const [direccion, setDireccion] = useState("");
     const [clave, setClave] = useState("");
     const [estado, setEstado] = useState(true);
+    const [departamentos,setDepartamentos]=useState([]);
+    const [municipios,setMunicipios]=useState([]);
+    const [tiposDocumento,setTiposDocumento]=useState([]);
 
     const getDepartamentos = async ()=>{
         const url = "http://localhost:5000/departamentos";
@@ -63,6 +66,29 @@ export const UsuarioContextProvider = (props) =>{
         }
     }
 
+    const getTiposDocumento = async ()=>{
+        const url = `http://localhost:5000/tiposdocumento`;
+        const cabeceras = new Headers();
+        cabeceras.set("Content-type", "application/json");
+
+        const opciones = {
+            method: "GET",
+            headers: cabeceras
+        }
+
+        try{
+            const respuesta = await fetch(url, opciones);
+            if (respuesta.ok){
+                const datos = await respuesta.json();
+                console.log(datos);
+                return datos;
+            }
+        } catch (e){
+            console.log(e);
+            return [];
+        }
+    }
+
     const postUsuario = async () =>{
         const url = "http://localhost:5000/usuarios";
         const cabeceras = new Headers();
@@ -70,7 +96,7 @@ export const UsuarioContextProvider = (props) =>{
 
         const body = {
             "idempresausuario": empresa,
-            "idtipodocumentousuario": 1,
+            "idtipodocumentousuario": tipoDocumento,
             "iddepartamentousuario": departamento,
             "idmunicipiousuario": municipio,
             "numerodocumentousuario": numeroDocumento,
@@ -80,7 +106,7 @@ export const UsuarioContextProvider = (props) =>{
             "telefonousuario": telefono,
             "direccionusuario": direccion,
             "claveusuario": numeroDocumento,
-            "estadousuario": true
+            "estadousuario": estado
         }
         console.log(body);
 
@@ -104,7 +130,7 @@ export const UsuarioContextProvider = (props) =>{
 
     return(
         <UsuarioContext.Provider value={
-            {
+            {   //Variables
                 idUsuario,
                 empresa,
                 nombre,
@@ -117,7 +143,11 @@ export const UsuarioContextProvider = (props) =>{
                 telefono,
                 direccion,
                 estado,
-    
+                departamentos,
+                municipios,
+                tiposDocumento,
+
+                //Set Variables
                 setIdUsuario,
                 setEmpresa,
                 setNombre,
@@ -130,10 +160,15 @@ export const UsuarioContextProvider = (props) =>{
                 setTelefono,
                 setDireccion,
                 setEstado,
-    
+                setDepartamentos,
+                setMunicipios,
+                setTiposDocumento,
+                
+                //Peticiones
                 postUsuario,
                 getDepartamentos,
-                getMunicipios
+                getMunicipios,
+                getTiposDocumento
             }
         }>
             {props.children}
