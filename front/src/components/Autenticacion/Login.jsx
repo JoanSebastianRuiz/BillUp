@@ -1,11 +1,14 @@
-import { useState, useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { AutenticacionContext } from "../../context/AutenticacionContext";
+import { UsuarioContext } from "../../context/UsuarioContext";
 
 export const Login = () =>{
-    const [usuarioInput, setUsuarioInput] = useState("");
-    const [contrasenaInput, setContrasenaInput] = useState("");
-    const {validacionLogin, autenticado, setAutenticado} = useContext(AutenticacionContext);
+    const {autenticado, setAutenticado} = useContext(AutenticacionContext);
+    const {setNumeroDocumento,validarUsuario} = useContext(UsuarioContext);
+    const password = useRef("");
+
+
     const navigate = useNavigate();
 
     useEffect(()=>{
@@ -15,7 +18,10 @@ export const Login = () =>{
     },[autenticado]);
 
     const handleIngresar = () =>{
-        validacionLogin(usuarioInput,contrasenaInput);
+        const respuesta = validarUsuario(password.current.value);
+        /* if (respuesta){
+            setAutenticado(true);
+        } */
     }
 
     return (
@@ -27,11 +33,11 @@ export const Login = () =>{
                 <form onSubmit={e=>e.preventDefault()}>
                     <label className="pl-2 text-xl mb-3 block" htmlFor="usuario">Usuario</label>
 
-                    <input onChange={(e)=>setUsuarioInput(e.target.value)} id="usuario" name="usuario" type="text" placeholder="Ingrese su usuario" className="border border-gray-300 rounded-lg w-full px-3 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-slate-500"/>
+                    <input onChange={(e)=>setNumeroDocumento(e.target.value)} id="usuario" name="usuario" type="text" placeholder="Ingrese su usuario" className="border border-gray-300 rounded-lg w-full px-3 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-slate-500"/>
 
                     <label htmlFor="contrasena" className="pl-2 text-xl mb-3 block" >Contraseña</label>
 
-                    <input onChange={(e)=>setContrasenaInput(e.target.value)} id="contrasena" name="contrasena" type="password" placeholder="Ingrese su contraseña" className="border border-gray-300 rounded-lg w-full px-3 py-2 mb-4"/>
+                    <input ref={password} id="contrasena" name="contrasena" type="password" placeholder="Ingrese su contraseña" className="border border-gray-300 rounded-lg w-full px-3 py-2 mb-4"/>
 
                     <button className="bg-slate-800 text-white rounded-lg px-4 py-2 w-full hover:bg-slate-700 mb-6 cursor-pointer " onClick={handleIngresar}>Ingresar</button>
                     

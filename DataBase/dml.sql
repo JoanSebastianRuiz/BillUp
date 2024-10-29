@@ -47,3 +47,11 @@ VALUES
 (3, 3, 3, 1, '9009876543', '8', 'Servicios Globales', 'Servicios Globales S.A.', 
  'Av. Central # 123', '120012', '+573112223344', 'servicios@globales.com', 
  'logo_globales.png', TRUE);
+
+ INSERT INTO rol(id_rol, nombre_rol, estado_rol)
+ VALUES (1, 'Administrador', TRUE),
+ (2, 'Supervisor', TRUE),
+ (3, 'Cajero', TRUE);
+
+INSERT INTO usuario
+VALUES (1,1,1,1,1,'1095837983','Joan','Ruiz','joan@gmail.com','3053724006','Calle 100#33A-13','1095837983',TRUE);

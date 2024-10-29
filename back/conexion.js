@@ -15,13 +15,14 @@ const pool = new Pool({
 })
 
 
-const ejecutarQuery = async(query)=>{
+const ejecutarQuery = async(query, params = [])=>{
     try{
-        const res = await pool.query(query);
+        const res = await pool.query(query,params);
         console.log(res.rows);
         return res.rows;
     } catch (err){
         console.log(err);
+        return [];
     }
 }
 

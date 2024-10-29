@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { UsuarioContext } from "../../context/UsuarioContext";
 import { MenuUsuario } from "./MenuUsuario";
 import { BtnAccion } from "../Buttons/BtnAccion";
@@ -12,10 +12,11 @@ import { ContenedorBtnAccion } from "../ElementosForm/ContenedorBtnAccion";
 
 export const RegistrarUsuario = () => {
     const {
-        departamento,
         departamentos,
         municipios,
         tiposDocumento,
+        roles,
+        departamento,
 
         setEmpresa,
         setNombre,
@@ -31,11 +32,14 @@ export const RegistrarUsuario = () => {
         setDepartamentos,
         setMunicipios,
         setTiposDocumento,
+        setRoles,
+        setRol,
 
         postUsuario,
         getDepartamentos,
         getMunicipios,
-        getTiposDocumento
+        getTiposDocumento,
+        getRoles
     } = useContext(UsuarioContext);
 
     useEffect(()=>{
@@ -44,28 +48,33 @@ export const RegistrarUsuario = () => {
             setDepartamentos(datosDepartamentos);
             setDepartamento(datosDepartamentos[0].id_depa);
         }
-        fetchDepartamentos();
-    },[]);
 
-    useEffect(()=>{
-        const fetchMunicipios = async () =>{
-            if (departamento){
-                const datosMunicipios = await getMunicipios(departamento);
-                setMunicipios(datosMunicipios);
-                setMunicipio(datosMunicipios[0].id_muni);
-            }
-        } 
-        fetchMunicipios();
-    },[departamento]);
-
-    useEffect(()=>{
         const fetchTiposDocumento = async ()=>{
             const datosTiposDocumento = await getTiposDocumento();
             setTiposDocumento(datosTiposDocumento);
             setTipoDocumento(datosTiposDocumento[0].id_tipo_docu)
         }
+
+        const fetchRoles = async () =>{
+            const datosRoles = await getRoles();
+            setRoles(datosRoles);
+            setRol(datosRoles[0].id_rol);
+        }
+        fetchDepartamentos();
         fetchTiposDocumento();
+        fetchRoles();
     },[]);
+
+    useEffect(()=>{
+        const fetchMunicipios = async () =>{
+            if (departamento){
+                const datosMunicipios = await getMunicipios();
+                setMunicipios(datosMunicipios);
+                setMunicipio(datosMunicipios[0]._id_muni);
+            }
+        } 
+        fetchMunicipios();
+    },[departamento]);
 
 
     return (
@@ -79,6 +88,17 @@ export const RegistrarUsuario = () => {
                     <ContenedorInputCrud>
                         <LabelCrud htmlFor="nombre" name="Empresa"></LabelCrud>
                         <InputTextCrud onChange={e=>setEmpresa(e.target.value )} id="empresa" name="empresa"></InputTextCrud>
+                    </ContenedorInputCrud>
+
+                    <ContenedorInputCrud>
+                        <LabelCrud htmlFor="rol" name="Rol"></LabelCrud>
+                        <SelectCrud onChange={e=>setRol(e.target.value )} name="rol" id="rol">
+                            {roles.map(({id_rol, nombre_rol})=>{
+                                return (
+                                    <option key={id_rol} value={id_rol}>{nombre_rol}</option>
+                                );
+                            })}
+                        </SelectCrud>
                     </ContenedorInputCrud>
 
 
@@ -129,7 +149,7 @@ export const RegistrarUsuario = () => {
                         <SelectCrud onChange={e=>setMunicipio(e.target.value )} id="municipio" name="municipio">
                             {municipios.map((municipio)=>{
                                 return(
-                                    <option key={municipio.id_muni} value={municipio.id_muni}>{municipio.nombre_muni}</option>
+                                    <option key={municipio._id_muni} value={municipio._id_muni}>{municipio._nombre_muni}</option>
                                 );
                             })}
                         </SelectCrud>

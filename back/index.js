@@ -29,47 +29,69 @@ app.get("/departamentos", async (req,res)=>{
 app.get("/municipios", async (req, res) => {
     const departamento = req.query.departamento;
     if (departamento){
-        const respuesta = await ejecutarQuery(`SELECT * FROM municipio WHERE id_depa=${parseInt(departamento)};`);
+        const respuesta = await ejecutarQuery(`SELECT * FROM obtenerMunicipios($1);`, [parseInt(departamento)]);
         res.send(JSON.stringify(respuesta));
     }
     else{
-        res.status(400).send("Error: el departamento es un valor requerido");
+        res.status(400).send("Error: El departamento es un valor requerido");
     }
 });
 
-app.get("/tiposDocumento", async(req,res)=>{
+app.get("/tiposdocumento", async(req,res)=>{
     const respuesta = await ejecutarQuery("SELECT * FROM tipo_documento;");
     res.json(respuesta);
+});
+
+app.get("/roles", async(req,res)=>{
+    const respuesta = await ejecutarQuery("SELECT * FROM rol;");
+    res.json(respuesta);
+});
+
+app.post("/usuarios/validarusuario", async(req,res)=>{
+    const {usuario, clave} = req.body;
+    
+    if (usuario && clave){
+        const respuesta  = await ejecutarQuery("SELECT validarUsuario($1,$2);",[usuario,clave]);
+        res.json(respuesta);
+    }
+    else if (!usuario){
+        res.status(400).send("Error: El numero de documento del usuario es un valor requerido");
+    }
+    else if (!clave){
+        res.status(400).send("Error: La clave del usuario es un valor requerido");
+    }
 })
 
 app.post("/usuarios", async(req,res)=>{
-    console.log(req.body);
-
-    const idempresausuario = req.body.idempresausuario;
-    const idtipodocumentousuario = req.body.idtipodocumentousuario;
-    const iddepartamentousuario = req.body.iddepartamentousuario;
-    const idmunicipiousuario = req.body.idmunicipiousuario;
-    const numerodocumentousuario = req.body.numerodocumentousuario;
-    const nombreusuario = req.body.nombreusuario;
-    const apellidousuario = req.body.apellidousuario;
-    const correousuario = req.body.correousuario;
-    const telefonousuario = req.body.telefonousuario;
-    const direccionusuario = req.body.direccionusuario;
-    const claveusuario  = req.body.claveusuario;
-    const estadousuario  = req.body.estadousuario;
+    //console.log(req.body);
+    const {
+        idempresa,
+        idtipodocumento,
+        idrol,
+        idmunicipio,
+        numerodocumento,
+        nombre,
+        apellido,
+        email,
+        telefono,
+        direccion,
+        clave,
+        estado
+    }=req.body;
     
     const respuesta = await ejecutarQuery(`SELECT insertarUsuario (
-        ${parseInt(idempresausuario)},
-        ${parseInt(idtipodocumentousuario)},
-        ${parseInt(idmunicipiousuario)},
-        '${numerodocumentousuario}',
-        '${nombreusuario}',
-        '${apellidousuario}',
-        '${correousuario}',
-        '${telefonousuario}',
-        '${direccionusuario}',
-        '${claveusuario}',
-        ${estadousuario});`);
+        ${parseInt(idempresa)},
+        ${parseInt(idtipodocumento)},
+        ${parseInt(idmunicipio)},
+        ${parseInt(idrol)},
+        '${numerodocumento}',
+        '${nombre}',
+        '${apellido}',
+        '${email}',
+        '${telefono}',
+        '${direccion}',
+        '${clave}',
+        ${estado});`);
     res.send(JSON.stringify(respuesta));
 });
 

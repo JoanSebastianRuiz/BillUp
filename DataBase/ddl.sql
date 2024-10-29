@@ -146,6 +146,7 @@ id_usua int not null,
 id_empre int not null,
 id_tipo_docu int not null,
 id_muni int not null,
+id_rol int not null,
 numero_documento_usua varchar(15) not null,
 nombre_usua varchar(100) not null,
 apellido_usua varchar(100) not null,
@@ -157,7 +158,8 @@ estado_usua boolean not null,
 primary key (id_usua),
 foreign key (id_empre) references empresa (id_empre),
 foreign key (id_tipo_docu) references tipo_documento (id_tipo_docu),
-foreign key (id_muni) references municipio (id_muni)
+foreign key (id_muni) references municipio (id_muni),
+foreign key (id_rol) references rol (id_rol)
 );
 
 CREATE TABLE IF NOT EXISTS tercero(
@@ -283,15 +285,6 @@ fecha_venc_deta_comp date not null,
 primary key (id_deta_comp),
 foreign key (id_Comp) references compra (id_Comp),
 foreign key (id_prod) references producto (id_prod)
-);
-
-CREATE TABLE IF NOT EXISTS rol_usuario(
-id_rol_usua int not null,
-id_rol int not null,
-id_usua int not null,
-primary key (id_rol_usua),
-foreign key (id_rol) references rol (id_rol),
-foreign key (id_usua) references usuario (id_usua)
 );
 
 CREATE TABLE IF NOT EXISTS detalle_venta(
