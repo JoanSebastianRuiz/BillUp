@@ -17,11 +17,12 @@ export const Login = () =>{
         }
     },[autenticado]);
 
-    const handleIngresar = () =>{
-        const respuesta = validarUsuario(password.current.value);
-        /* if (respuesta){
+    const handleIngresar = async () =>{
+        const respuesta =  await validarUsuario(password.current.value);
+
+        if (respuesta[0].usuariovalidado!=="FALSE"){
             setAutenticado(true);
-        } */
+        }
     }
 
     return (

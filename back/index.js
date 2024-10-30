@@ -47,17 +47,22 @@ app.get("/roles", async(req,res)=>{
     res.json(respuesta);
 });
 
+app.get("/empresas", async(req,res)=>{
+    const respuesta = await ejecutarQuery("SELECT * FROM empresa;");
+    res.json(respuesta);
+});
+
 app.post("/usuarios/validarusuario", async(req,res)=>{
-    const {usuario, clave} = req.body;
+    const {usuario, password} = req.body;
     
-    if (usuario && clave){
-        const respuesta  = await ejecutarQuery("SELECT validarUsuario($1,$2);",[usuario,clave]);
+    if (usuario && password){
+        const respuesta  = await ejecutarQuery("SELECT validarUsuario($1,$2) AS usuariovalidado;",[usuario,password]);
         res.json(respuesta);
     }
     else if (!usuario){
         res.status(400).send("Error: El numero de documento del usuario es un valor requerido");
     }
-    else if (!clave){
+    else if (!password){
         res.status(400).send("Error: La clave del usuario es un valor requerido");
     }
 })

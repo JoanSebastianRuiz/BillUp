@@ -7,7 +7,7 @@ export const UsuarioContextProvider = (props) =>{
     const [empresa, setEmpresa] = useState("");
     const [nombre, setNombre] = useState("");
     const [apellido, setApellido] = useState("");
-    const [tipoDocumento, setTipoDocumento] = useState("CC");
+    const [tipoDocumento, setTipoDocumento] = useState("");
     const [numeroDocumento, setNumeroDocumento] = useState("");
     const [departamento, setDepartamento] = useState("");
     const [municipio, setMunicipio] = useState("");
@@ -20,6 +20,7 @@ export const UsuarioContextProvider = (props) =>{
     const [tiposDocumento,setTiposDocumento]=useState([]);
     const [rol,setRol]=useState("");
     const [roles,setRoles]=useState([]);
+    const [empresas,setEmpresas]=useState([]);
 
     const getDepartamentos = async ()=>{
         const url = "http://localhost:5000/departamentos";
@@ -35,7 +36,7 @@ export const UsuarioContextProvider = (props) =>{
             const respuesta = await fetch(url, opciones);
             if (respuesta.ok){
                 const datos = await respuesta.json();
-                console.log((datos));
+                //console.log((datos));
                 return datos;
             }
         } catch (e){
@@ -58,7 +59,7 @@ export const UsuarioContextProvider = (props) =>{
             const respuesta = await fetch(url, opciones);
             if (respuesta.ok){
                 const datos = await respuesta.json();
-                console.log(datos);
+                //console.log(datos);
                 return datos;
             }
         } catch (e){
@@ -81,7 +82,7 @@ export const UsuarioContextProvider = (props) =>{
             const respuesta = await fetch(url, opciones);
             if (respuesta.ok){
                 const datos = await respuesta.json();
-                console.log(datos);
+                //console.log(datos);
                 return datos;
             }
         } catch (e){
@@ -92,6 +93,29 @@ export const UsuarioContextProvider = (props) =>{
 
     const getRoles = async ()=>{
         const url = `http://localhost:5000/roles`;
+        const cabeceras = new Headers();
+        cabeceras.set("Content-type", "application/json");
+
+        const opciones = {
+            method: "GET",
+            headers: cabeceras
+        }
+
+        try{
+            const respuesta = await fetch(url, opciones);
+            if (respuesta.ok){
+                const datos = await respuesta.json();
+                //console.log(datos);
+                return datos;
+            }
+        } catch (e){
+            console.log(e);
+            return [];
+        }
+    }
+
+    const getEmpresas = async ()=>{
+        const url = `http://localhost:5000/empresas`;
         const cabeceras = new Headers();
         cabeceras.set("Content-type", "application/json");
 
@@ -122,6 +146,7 @@ export const UsuarioContextProvider = (props) =>{
             usuario: numeroDocumento,
             password: password
         }
+        
 
         const opciones = {
             method: "POST",
@@ -133,7 +158,6 @@ export const UsuarioContextProvider = (props) =>{
             const respuesta = await fetch(url, opciones);
             if (respuesta.ok){
                 const datos = await respuesta.json();
-                console.log(datos);
                 return datos;
             }
         } catch (e){
@@ -173,7 +197,7 @@ export const UsuarioContextProvider = (props) =>{
             const respuesta = await fetch(url, opciones);
             if (respuesta.ok){
                 const datos = await respuesta.json();
-                console.log(datos);
+                //console.log(datos);
             }
         } catch (e){
             console.log(e);
@@ -201,6 +225,7 @@ export const UsuarioContextProvider = (props) =>{
                 tiposDocumento,
                 rol,
                 roles,
+                empresas,
 
                 //Set Variables
                 setIdUsuario,
@@ -220,6 +245,7 @@ export const UsuarioContextProvider = (props) =>{
                 setTiposDocumento,
                 setRol,
                 setRoles,
+                setEmpresas,
                 
                 //Peticiones
                 postUsuario,
@@ -227,6 +253,7 @@ export const UsuarioContextProvider = (props) =>{
                 getMunicipios,
                 getTiposDocumento,
                 getRoles,
+                getEmpresas,
                 validarUsuario
             }
         }>
