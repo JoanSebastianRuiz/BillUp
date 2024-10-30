@@ -17,7 +17,7 @@ process.on('SIGINT', async () => {
 });
 
 app.get("/usuarios", async (req,res)=>{
-    const respuesta = await ejecutarQuery("SELECT * FROM usuario;");
+    const respuesta = await ejecutarQuery("SELECT * FROM obtenerUsuarios();");
     res.send(JSON.stringify(respuesta));
 });
 

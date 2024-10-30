@@ -21,6 +21,7 @@ export const UsuarioContextProvider = (props) =>{
     const [rol,setRol]=useState("");
     const [roles,setRoles]=useState([]);
     const [empresas,setEmpresas]=useState([]);
+    const [usuarios,setUsuarios]=useState([]);
 
     const getDepartamentos = async ()=>{
         const url = "http://localhost:5000/departamentos";
@@ -137,6 +138,29 @@ export const UsuarioContextProvider = (props) =>{
         }
     }
 
+    const getUsuarios = async ()=>{
+        const url = `http://localhost:5000/usuarios`;
+        const cabeceras = new Headers();
+        cabeceras.set("Content-type", "application/json");
+
+        const opciones = {
+            method: "GET",
+            headers: cabeceras
+        }
+
+        try{
+            const respuesta = await fetch(url, opciones);
+            if (respuesta.ok){
+                const datos = await respuesta.json();
+                console.log(datos);
+                return datos;
+            }
+        } catch (e){
+            console.log(e);
+            return [];
+        }
+    }
+
     const validarUsuario = async (password)=>{
         const url = `http://localhost:5000/usuarios/validarusuario`;
         const cabeceras = new Headers();
@@ -226,6 +250,7 @@ export const UsuarioContextProvider = (props) =>{
                 rol,
                 roles,
                 empresas,
+                usuarios,
 
                 //Set Variables
                 setIdUsuario,
@@ -246,6 +271,7 @@ export const UsuarioContextProvider = (props) =>{
                 setRol,
                 setRoles,
                 setEmpresas,
+                setUsuarios,
                 
                 //Peticiones
                 postUsuario,
@@ -254,7 +280,8 @@ export const UsuarioContextProvider = (props) =>{
                 getTiposDocumento,
                 getRoles,
                 getEmpresas,
-                validarUsuario
+                validarUsuario,
+                getUsuarios
             }
         }>
             {props.children}

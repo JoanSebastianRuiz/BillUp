@@ -13,7 +13,7 @@ export const Login = () =>{
 
     useEffect(()=>{
         if (autenticado){
-            navigate("/usuarios/registrar");
+            navigate("/usuarios");
         }
     },[autenticado]);
 

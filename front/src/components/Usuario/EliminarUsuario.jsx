@@ -20,8 +20,8 @@ export const EliminarUsuario = () =>{
                 <ParrafoCrud name="Ingrese el numero de documento del usuario que desea eliminar"></ParrafoCrud>
                 <ContenedorFormCrud>
                     <ContenedorInputCrud>
-                        <LabelCrud htmlFor={numeroDocumento} name="Numero de documento"></LabelCrud>
-                        <InputTextCrud onChange={e=>setNumeroDocumento(e.target.value)}></InputTextCrud>
+                        <LabelCrud htmlFor="numeroDocumento" name="Numero de documento" className="text-center"></LabelCrud>
+                        <InputTextCrud onChange={e=>setNumeroDocumento(e.target.value)} id="numeroDocumento" name="numeroDocumento"></InputTextCrud>
                     </ContenedorInputCrud>
                 </ContenedorFormCrud>
 
