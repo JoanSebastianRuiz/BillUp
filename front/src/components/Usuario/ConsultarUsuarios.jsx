@@ -3,33 +3,115 @@ import { useContext, useEffect } from "react";
 import { ListaUsuarios } from "./ListaUsuarios";
 import {MenuUsuario} from "./MenuUsuario";
 import { ParrafoCrud } from "../Text/ParrafoCrud";
-import { ContenedorFormCrud } from "../ElementosForm/ContenedorFormCrud";
-import {SelectCrud} from "../ElementosForm/SelectCrud"
+import {SelectCrud} from "../ElementosForm/SelectCrud";
+import {ContenedorFormCrud} from "../ElementosForm/ContenedorFormCrud";
+import { LabelCrud } from "../Labels/LabelCrud";
+import {ContenedorInputCrud} from "../ElementosForm/ContenedorInputCrud";
+import { ContenedorFiltros } from "../ElementosForm/ContenedorFiltros";
+import { useState } from "react";
 
 export const ConsultarUsuarios = () =>{
-    const {usuarios, setUsuarios, getUsuarios} = useContext(UsuarioContext);
+
+    const {
+        departamentos,
+        departamento,
+        municipios,
+        tiposDocumento,
+        roles,
+        empresas,
+        usuarios,
+
+        setEmpresa,
+        setEmpresas,
+        setTipoDocumento,
+        setDepartamento,
+        setMunicipio,
+        setDepartamentos,
+        setTiposDocumento,
+        setRoles,
+        setRol,
+        setUsuarios,
+        setMunicipios,
+
+        getDepartamentos,
+        getTiposDocumento,
+        getRoles,
+        getEmpresas,
+        getUsuarios,
+        getMunicipios
+    } = useContext(UsuarioContext);
+
+
+    useEffect(()=>{
+        const fetchDepartamentos = async () =>{
+            const datosDepartamentos = await getDepartamentos();
+            setDepartamentos(datosDepartamentos);
+            setDepartamento(datosDepartamentos[0].id_depa);
+        }
+
+        const fetchTiposDocumento = async ()=>{
+            const datosTiposDocumento = await getTiposDocumento();
+            setTiposDocumento(datosTiposDocumento);
+            setTipoDocumento(datosTiposDocumento[0].id_tipo_docu)
+        }
+
+        const fetchRoles = async () =>{
+            const datosRoles = await getRoles();
+            setRoles(datosRoles);
+            setRol(datosRoles[0].id_rol);
+        }
+
+        const fetchEmpresas = async () =>{
+            const datosEmpresas = await getEmpresas();
+            setEmpresas(datosEmpresas);
+            setEmpresa(datosEmpresas[0].id_empre);
+        }
+
+        fetchDepartamentos();
+        fetchTiposDocumento();
+        fetchRoles();
+        fetchEmpresas();
+    },[]);
+
+    useEffect(()=>{
+        const fetchMunicipios = async () =>{
+            if (departamento){
+                const datosMunicipios = await getMunicipios();
+                setMunicipios(datosMunicipios);
+                setMunicipio(datosMunicipios[0]._id_muni);
+            }
+        } 
+        fetchMunicipios();
+    },[departamento]);
 
     useEffect( ()=>{
         const fetchUsuarios = async () =>{
             const datosUsuarios = await getUsuarios();
-            setUsuarios(datosUsuarios);
+            let datosFiltrados = datosUsuarios;
+
+            if (departamento!==""){
+                datosFiltrados = datosUsuarios.filter(({_id_depa})=>_id_depa==departamento);
+            }
+            setUsuarios(datosFiltrados);
         }
         fetchUsuarios();
-    }, [])
+    }, [departamento])
+
     return(
         <>
             <MenuUsuario></MenuUsuario>
+
             <ParrafoCrud name="Seleccione los filtros que desea aplicar a la consulta de usuarios"></ParrafoCrud>
 
-            <ContenedorForm>
+            <ContenedorFiltros>
                 <ContenedorInputCrud>
                     <LabelCrud htmlFor="empresa" name="Empresa"></LabelCrud>
                     <SelectCrud onChange={e=>setEmpresa(e.target.value )} id="empresa" name="empresa">
+                        <option disabled>Seleccionar</option>
                         {empresas.map(({id_empre, nombre_empre})=>{
                             return(
                                 <option key={id_empre} value={id_empre}>{nombre_empre}</option>
                             );
-                            
                         })}
                     </SelectCrud>
                 </ContenedorInputCrud>
@@ -78,7 +160,7 @@ export const ConsultarUsuarios = () =>{
                     </SelectCrud>
                 </ContenedorInputCrud>
 
-            </ContenedorForm>
+            </ContenedorFiltros>
 
             <ListaUsuarios usuarios={usuarios}></ListaUsuarios>
             

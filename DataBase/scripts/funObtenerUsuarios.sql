@@ -1,6 +1,11 @@
 CREATE OR REPLACE FUNCTION ObtenerUsuarios()
 RETURNS TABLE(
     _id_usua usuario.id_usua%TYPE,
+    _id_empre usuario.id_empre%TYPE,
+    _id_tipo_docu usuario.id_tipo_docu%TYPE,
+    _id_depa departamento.id_depa%TYPE,
+    _id_muni usuario.id_muni%TYPE,
+    _id_rol usuario.id_rol%TYPE,
     _nombre_empre empresa.nombre_empre%TYPE,
     _nombre_tipo_docu tipo_documento.nombre_tipo_docu%TYPE,
     _nombre_depa departamento.nombre_depa%TYPE,
@@ -18,7 +23,7 @@ RETURNS TABLE(
 AS $$
 BEGIN
     RETURN QUERY
-    SELECT u.id_usua, e.nombre_empre, t.nombre_tipo_docu, d.nombre_depa, m.nombre_muni, r.nombre_rol, u.numero_documento_usua, u.nombre_usua, u.apellido_usua, u.correo_usua, u.telefono_usua, u.direccion_usua, u.estado_usua
+    SELECT u.id_usua, u.id_empre, u.id_tipo_docu, d.id_depa, u.id_muni, u.id_rol, e.nombre_empre, t.nombre_tipo_docu, d.nombre_depa, m.nombre_muni, r.nombre_rol, u.numero_documento_usua, u.nombre_usua, u.apellido_usua, u.correo_usua, u.telefono_usua, u.direccion_usua, u.estado_usua
     FROM usuario u
     JOIN empresa e ON u.id_empre=e.id_empre
     JOIN tipo_documento t ON u.id_tipo_docu=t.id_tipo_docu
