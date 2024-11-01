@@ -129,7 +129,7 @@ export const UsuarioContextProvider = (props) =>{
             const respuesta = await fetch(url, opciones);
             if (respuesta.ok){
                 const datos = await respuesta.json();
-                console.log(datos);
+                //console.log(datos);
                 return datos;
             }
         } catch (e){
@@ -152,7 +152,30 @@ export const UsuarioContextProvider = (props) =>{
             const respuesta = await fetch(url, opciones);
             if (respuesta.ok){
                 const datos = await respuesta.json();
-                console.log(datos);
+                //console.log(datos);
+                return datos;
+            }
+        } catch (e){
+            console.log(e);
+            return [];
+        }
+    }
+
+    const getUsuarioId = async (id_usua)=>{
+        const url = `http://localhost:5000/usuarios/${id_usua}`;
+        const cabeceras = new Headers();
+        cabeceras.set("Content-type", "application/json");
+
+        const opciones = {
+            method: "GET",
+            headers: cabeceras
+        }
+
+        try{
+            const respuesta = await fetch(url, opciones);
+            if (respuesta.ok){
+                const datos = await respuesta.json();
+                //console.log(datos);
                 return datos;
             }
         } catch (e){
@@ -221,7 +244,74 @@ export const UsuarioContextProvider = (props) =>{
             const respuesta = await fetch(url, opciones);
             if (respuesta.ok){
                 const datos = await respuesta.json();
+                console.log(datos);
+            }
+        } catch (e){
+            console.log(e);
+            return [];
+        }
+    }
+
+    const putUsuario = async (id) =>{
+        const url = "http://localhost:5000/usuarios";
+        const cabeceras = new Headers();
+        cabeceras.set("Content-type", "application/json");
+
+        const body = {
+            "id": id,
+            "idempresa": empresa,
+            "idtipodocumento": tipoDocumento,
+            "idrol": rol,
+            "idmunicipio": municipio,
+            "numerodocumento": numeroDocumento,
+            "nombre": nombre,
+            "apellido": apellido,
+            "email": email,
+            "telefono": telefono,
+            "direccion": direccion,
+            "clave": numeroDocumento,
+            "estado": estado
+        }
+        console.log(body);
+
+        const opciones = {
+            method: "PUT",
+            headers: cabeceras,
+            body: JSON.stringify(body)
+        }
+
+        try{
+            const respuesta = await fetch(url, opciones);
+            if (respuesta.ok){
+                const datos = await respuesta.json();
                 //console.log(datos);
+            }
+        } catch (e){
+            console.log(e);
+            return [];
+        }
+    }
+
+    const deleteUsuario = async (id) =>{
+        const url = "http://localhost:5000/usuarios";
+        const cabeceras = new Headers();
+        cabeceras.set("Content-type", "application/json");
+
+        const body = {
+            "id": id
+        }
+
+        const opciones = {
+            method: "DELETE",
+            headers: cabeceras,
+            body: JSON.stringify(body)
+        }
+
+        try{
+            const respuesta = await fetch(url, opciones);
+            if (respuesta.ok){
+                const datos = await respuesta.json();
+                console.log(datos);
             }
         } catch (e){
             console.log(e);
@@ -281,7 +371,9 @@ export const UsuarioContextProvider = (props) =>{
                 getRoles,
                 getEmpresas,
                 validarUsuario,
-                getUsuarios
+                getUsuarios,
+                getUsuarioId,
+                putUsuario
             }
         }>
             {props.children}

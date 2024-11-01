@@ -23,6 +23,7 @@ function App() {
         <Route path='/usuarios/editar' element={<RutaProtegida><EditarUsuario></EditarUsuario></RutaProtegida>}></Route>
         <Route path='/' element={<Login></Login>}></Route>
         <Route path='/usuarios' element={<RutaProtegida><ConsultarUsuarios></ConsultarUsuarios></RutaProtegida>}></Route>
+        <Route path='/usuarios/editar/:id_usua' element={<RutaProtegida><EditarUsuario></EditarUsuario></RutaProtegida>}></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -21,34 +21,48 @@ app.get("/usuarios", async (req,res)=>{
     res.send(JSON.stringify(respuesta));
 });
 
-app.get("/departamentos", async (req,res)=>{
-    const respuesta = await ejecutarQuery("SELECT * FROM departamento;");
+app.get("/usuarios/:id_usua", async (req,res)=>{
+    const id_usua = req.params.id_usua;
+    const respuesta = await ejecutarQuery("SELECT * FROM obtenerUsuarioId($1);",[parseInt(id_usua)]);
+    //console.log(respuesta);
+
     res.send(JSON.stringify(respuesta));
 });
 
-app.get("/municipios", async (req, res) => {
-    const departamento = req.query.departamento;
-    if (departamento){
-        const respuesta = await ejecutarQuery(`SELECT * FROM obtenerMunicipios($1);`, [parseInt(departamento)]);
-        res.send(JSON.stringify(respuesta));
-    }
-    else{
-        res.status(400).send("Error: El departamento es un valor requerido");
-    }
-});
+app.put("/usuarios", async (req,res)=>{
+    const {
+        id,
+        idempresa,
+        idtipodocumento,
+        idrol,
+        idmunicipio,
+        numerodocumento,
+        nombre,
+        apellido,
+        email,
+        telefono,
+        direccion,
+        estado
+    }=req.body;
+    
+    const respuesta = await ejecutarQuery(`SELECT actualizarUsuario($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12);`,
+        [
+            id, 
+            parseInt(idempresa), 
+            parseInt(idtipodocumento), 
+            parseInt(idmunicipio), 
+            parseInt(idrol), 
+            numerodocumento, 
+            nombre, 
+            apellido, 
+            email, 
+            telefono, 
+            direccion, 
+            estado
+        ]);
 
-app.get("/tiposdocumento", async(req,res)=>{
-    const respuesta = await ejecutarQuery("SELECT * FROM tipo_documento;");
-    res.json(respuesta);
-});
+    //console.log(respuesta);
 
-app.get("/roles", async(req,res)=>{
-    const respuesta = await ejecutarQuery("SELECT * FROM rol;");
-    res.json(respuesta);
-});
-
-app.get("/empresas", async(req,res)=>{
-    const respuesta = await ejecutarQuery("SELECT * FROM empresa;");
     res.json(respuesta);
 });
 
@@ -84,21 +98,63 @@ app.post("/usuarios", async(req,res)=>{
         estado
     }=req.body;
     
-    const respuesta = await ejecutarQuery(`SELECT insertarUsuario (
-        ${parseInt(idempresa)},
-        ${parseInt(idtipodocumento)},
-        ${parseInt(idmunicipio)},
-        ${parseInt(idrol)},
-        '${numerodocumento}',
-        '${nombre}',
-        '${apellido}',
-        '${email}',
-        '${telefono}',
-        '${direccion}',
-        '${clave}',
-        ${estado});`);
+    const respuesta = await ejecutarQuery(`SELECT insertarUsuario ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12);`,
+        [
+            parseInt(idempresa), 
+            parseInt(idtipodocumento), 
+            parseInt(idmunicipio), 
+            parseInt(idrol), 
+            numerodocumento, 
+            nombre, 
+            apellido, 
+            email, 
+            telefono, 
+            direccion, 
+            clave,
+            estado
+        ]);
+
     res.send(JSON.stringify(respuesta));
 });
+
+app.delete("/usuarios", async (req,res)=>{
+    const {id_usua} = req.body;
+    const respuesta = await ejecutarQuery(`SELECT eliminarUsuario($1);`, [id_usua]);
+    res.json(respuesta);
+});
+
+app.get("/departamentos", async (req,res)=>{
+    const respuesta = await ejecutarQuery("SELECT * FROM departamento;");
+    res.send(JSON.stringify(respuesta));
+});
+
+app.get("/municipios", async (req, res) => {
+    const departamento = req.query.departamento;
+    if (departamento){
+        const respuesta = await ejecutarQuery(`SELECT * FROM obtenerMunicipios($1);`, [parseInt(departamento)]);
+        res.send(JSON.stringify(respuesta));
+    }
+    else{
+        res.status(400).send("Error: El departamento es un valor requerido");
+    }
+});
+
+app.get("/tiposdocumento", async(req,res)=>{
+    const respuesta = await ejecutarQuery("SELECT * FROM tipo_documento;");
+    res.json(respuesta);
+});
+
+app.get("/roles", async(req,res)=>{
+    const respuesta = await ejecutarQuery("SELECT * FROM rol;");
+    res.json(respuesta);
+});
+
+app.get("/empresas", async(req,res)=>{
+    const respuesta = await ejecutarQuery("SELECT * FROM empresa;");
+    res.json(respuesta);
+});
+
+
 
 //Thunder client para peticiones
 

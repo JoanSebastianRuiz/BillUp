@@ -12,7 +12,7 @@ import { ContenedorBtnAccion } from "../ElementosForm/ContenedorBtnAccion";
 import { ContenedorFormCrud } from "../ElementosForm/ContenedorFormCrud";
 import { ParrafoCrud } from "../Text/ParrafoCrud";
 
-export const DatosInputUsuario = ({parrafo, classNumeroDocumento="", nameButton, functionButton}) => {
+export const DatosInputUsuario = ({id_usua="", parrafo, classNumeroDocumento="", nameButton, functionButton}) => {
     const {
         departamentos,
         municipios,
@@ -37,12 +37,14 @@ export const DatosInputUsuario = ({parrafo, classNumeroDocumento="", nameButton,
         setTiposDocumento,
         setRoles,
         setRol,
+        setEstado,
 
         getDepartamentos,
         getMunicipios,
         getTiposDocumento,
         getRoles,
-        getEmpresas
+        getEmpresas,
+        getUsuarioId
     } = useContext(UsuarioContext);
 
     useEffect(()=>{
@@ -74,6 +76,54 @@ export const DatosInputUsuario = ({parrafo, classNumeroDocumento="", nameButton,
         fetchTiposDocumento();
         fetchRoles();
         fetchEmpresas();
+
+        if (id_usua!==""){
+            const inputEmpresa = document.querySelector("#empresa");
+            const inputRol = document.querySelector("#rol");
+            const inputNombre = document.querySelector("#nombre");
+            const inputApellido = document.querySelector("#apellido");
+            const inputTipoDocumento = document.querySelector("#tipoDocumento");
+            const inputNumeroDocumento = document.querySelector("#numeroDocumento");
+            const inputDepartamento = document.querySelector("#departamento");
+            const inputMunicipio = document.querySelector("#municipio");
+            const inputEmail = document.querySelector("#email");
+            const inputTelefono = document.querySelector("#telefono");
+            const inputDireccion = document.querySelector("#direccion");
+            const inputEstado = document.querySelector("#estado");
+            
+
+            const fetchUsuarioId = async () =>{
+                const datosUsuario = await getUsuarioId(id_usua);
+                const {_id_empre, _id_rol, _nombre_usua, _apellido_usua, _id_tipo_docu, _numero_documento_usua, _id_depa, _id_muni, _correo_usua, _telefono_usua, _direccion_usua, _estado_usua} = datosUsuario[0];
+                
+                inputEmpresa.value = _id_empre;
+                inputRol.value = _id_rol;
+                inputNombre.value = _nombre_usua;
+                inputApellido.value = _apellido_usua;
+                inputTipoDocumento.value = _id_tipo_docu;
+                inputNumeroDocumento.value = _numero_documento_usua;
+                inputDepartamento.value = _id_depa;
+                inputMunicipio.value = _id_muni;
+                inputEmail.value = _correo_usua;
+                inputTelefono.value = _telefono_usua;
+                inputDireccion.value = _direccion_usua;
+                inputEstado.value = _estado_usua;
+
+                setEmpresa(_id_empre);
+                setRol(_id_rol);
+                setNombre(_nombre_usua);
+                setApellido(_apellido_usua);
+                setTipoDocumento(_id_tipo_docu);
+                setNumeroDocumento(_numero_documento_usua);
+                setDepartamento(_id_depa);
+                setMunicipio(_id_muni);
+                setEmail(_correo_usua);
+                setTelefono(_telefono_usua);
+                setDireccion(_direccion_usua);
+                setEstado(_estado_usua);
+            }
+            fetchUsuarioId();
+        }
     },[]);
 
     useEffect(()=>{
@@ -86,6 +136,8 @@ export const DatosInputUsuario = ({parrafo, classNumeroDocumento="", nameButton,
         } 
         fetchMunicipios();
     },[departamento]);
+
+
 
 
     return (
@@ -191,6 +243,17 @@ export const DatosInputUsuario = ({parrafo, classNumeroDocumento="", nameButton,
                         <LabelCrud htmlFor="direccion" name="Direccion"></LabelCrud>
                         <InputTextCrud onChange={e=>setDireccion(e.target.value)} id="direccion" name="direccion" />
                     </ContenedorInputCrud>
+
+                    {id_usua!=="" && (
+                        <ContenedorInputCrud>
+                        <LabelCrud htmlFor="estado" name="Estado"></LabelCrud>
+                        <SelectCrud onChange={e=>setEstado(e.target.value )} id="estado" name="estado">
+                            <option value={true}>Activo</option>
+                            <option value={false}>Inactivo</option>
+                        </SelectCrud>
+                    </ContenedorInputCrud>)
+                    }
+                    
                 </ContenedorFormCrud>
 
                 <ContenedorBtnAccion>

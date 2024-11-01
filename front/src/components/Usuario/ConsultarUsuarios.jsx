@@ -1,16 +1,22 @@
 import { UsuarioContext } from "../../context/UsuarioContext";
 import { useContext, useEffect } from "react";
-import { ListaUsuarios } from "./ListaUsuarios";
+import { ListaCard } from "./ListaCard";
 import {MenuUsuario} from "./MenuUsuario";
 import { ParrafoCrud } from "../Text/ParrafoCrud";
 import {SelectCrud} from "../ElementosForm/SelectCrud";
-import {ContenedorFormCrud} from "../ElementosForm/ContenedorFormCrud";
 import { LabelCrud } from "../Labels/LabelCrud";
 import {ContenedorInputCrud} from "../ElementosForm/ContenedorInputCrud";
+import {ContenedorBtnAccion} from "../ElementosForm/ContenedorBtnAccion";
 import { ContenedorFiltros } from "../ElementosForm/ContenedorFiltros";
 import { useState } from "react";
+import { UserCard } from "./UserCard";
+import { InputTextCrud } from "../ElementosForm/InputTextCrud";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { BtnAccion } from "../Buttons/BtnAccion";
 
 export const ConsultarUsuarios = () =>{
+    const [busqueda,setBusqueda]=useState("");
 
     const {
         departamentos,
@@ -20,6 +26,10 @@ export const ConsultarUsuarios = () =>{
         roles,
         empresas,
         usuarios,
+        tipoDocumento,
+        empresa,
+        municipio,
+        rol,
 
         setEmpresa,
         setEmpresas,
@@ -32,7 +42,7 @@ export const ConsultarUsuarios = () =>{
         setRol,
         setUsuarios,
         setMunicipios,
-
+        
         getDepartamentos,
         getTiposDocumento,
         getRoles,
@@ -41,36 +51,87 @@ export const ConsultarUsuarios = () =>{
         getMunicipios
     } = useContext(UsuarioContext);
 
+    const inputEmpresa = document.querySelector("#empresa");
+    const inputRol = document.querySelector("#rol");
+    const inputDepartamento = document.querySelector("#departamento");
+    const inputMunicipio = document.querySelector("#municipio");
+    const inputTipoDocumento = document.querySelector("#tipoDocumento");
+    const inputBusqueda = document.querySelector("#busqueda");
+
+    const handleLimpiarFiltros = () =>{
+        setEmpresa("");
+        setRol("");
+        setDepartamento("");
+        setMunicipio("");
+        setBusqueda("");
+        setTipoDocumento("");
+
+        inputEmpresa.value="";
+        inputRol.value="";
+        inputDepartamento.value="";
+        inputMunicipio.value="";
+        inputTipoDocumento.value="";
+        inputBusqueda.value="";
+    }
+
 
     useEffect(()=>{
+
+        const inputEmpresa = document.querySelector("#empresa");
+        const inputRol = document.querySelector("#rol");
+        const inputDepartamento = document.querySelector("#departamento");
+        const inputMunicipio = document.querySelector("#municipio");
+        const inputTipoDocumento = document.querySelector("#tipoDocumento");
+        const inputBusqueda = document.querySelector("#busqueda");
+    
+        const limpiarFiltros = () =>{
+            setEmpresa("");
+            setRol("");
+            setDepartamento("");
+            setMunicipio("");
+            setBusqueda("");
+            setTipoDocumento("");
+    
+            inputEmpresa.value="";
+            inputRol.value="";
+            inputDepartamento.value="";
+            inputMunicipio.value="";
+            inputTipoDocumento.value="";
+            inputBusqueda.value="";
+        }
+        
+
         const fetchDepartamentos = async () =>{
             const datosDepartamentos = await getDepartamentos();
             setDepartamentos(datosDepartamentos);
-            setDepartamento(datosDepartamentos[0].id_depa);
         }
 
         const fetchTiposDocumento = async ()=>{
             const datosTiposDocumento = await getTiposDocumento();
             setTiposDocumento(datosTiposDocumento);
-            setTipoDocumento(datosTiposDocumento[0].id_tipo_docu)
         }
 
         const fetchRoles = async () =>{
             const datosRoles = await getRoles();
             setRoles(datosRoles);
-            setRol(datosRoles[0].id_rol);
         }
 
         const fetchEmpresas = async () =>{
             const datosEmpresas = await getEmpresas();
             setEmpresas(datosEmpresas);
-            setEmpresa(datosEmpresas[0].id_empre);
+        }
+
+        const fetchUsuarios = async () =>{
+            const datosUsuarios = await getUsuarios();
+            setUsuarios(datosUsuarios);
         }
 
         fetchDepartamentos();
         fetchTiposDocumento();
         fetchRoles();
         fetchEmpresas();
+        limpiarFiltros();
+        fetchUsuarios();
     },[]);
 
     useEffect(()=>{
@@ -78,7 +139,6 @@ export const ConsultarUsuarios = () =>{
             if (departamento){
                 const datosMunicipios = await getMunicipios();
                 setMunicipios(datosMunicipios);
-                setMunicipio(datosMunicipios[0]._id_muni);
             }
         } 
         fetchMunicipios();
@@ -87,15 +147,44 @@ export const ConsultarUsuarios = () =>{
     useEffect( ()=>{
         const fetchUsuarios = async () =>{
             const datosUsuarios = await getUsuarios();
-            let datosFiltrados = datosUsuarios;
+            //console.log(usuarios);
+            let datosFiltrados = [];
+            let datosFinales = datosUsuarios;
 
             if (departamento!==""){
-                datosFiltrados = datosUsuarios.filter(({_id_depa})=>_id_depa==departamento);
+                datosFiltrados = datosFinales.filter(({_id_depa})=>_id_depa==departamento);
+                datosFinales = datosFiltrados;
             }
-            setUsuarios(datosFiltrados);
+
+            if (municipio!==""){
+                datosFiltrados = datosFinales.filter(({_id_muni})=>_id_muni==municipio);
+                datosFinales = datosFiltrados;
+            }
+
+            if (tipoDocumento!==""){
+                datosFiltrados = datosFinales.filter(({_id_tipo_docu})=>_id_tipo_docu==tipoDocumento);
+                datosFinales = datosFiltrados;
+            }
+
+            if (empresa!==""){
+                datosFiltrados = datosFinales.filter(({_id_empre})=>_id_empre==empresa);
+                datosFinales = datosFiltrados;
+            }
+
+            if (rol!==""){
+                datosFiltrados = datosFinales.filter(({_id_rol})=>_id_rol==rol);
+                datosFinales = datosFiltrados;
+            }
+
+            if (busqueda!==""){
+                datosFiltrados = datosFinales.filter(({_nombre_usua, _apellido_usua})=>_nombre_usua.toLowerCase().includes(busqueda.toLowerCase()) || _apellido_usua.toLowerCase().includes(busqueda.toLowerCase()));
+                datosFinales = datosFiltrados;
+            }
+            setUsuarios(datosFinales);
         }
         fetchUsuarios();
-    }, [departamento])
+    }, [departamento, rol, municipio, empresa, tipoDocumento, busqueda]);
+
 
     return(
         <>
@@ -107,7 +196,7 @@ export const ConsultarUsuarios = () =>{
                 <ContenedorInputCrud>
                     <LabelCrud htmlFor="empresa" name="Empresa"></LabelCrud>
                     <SelectCrud onChange={e=>setEmpresa(e.target.value )} id="empresa" name="empresa">
-                        <option disabled>Seleccionar</option>
+                        
                         {empresas.map(({id_empre, nombre_empre})=>{
                             return(
                                 <option key={id_empre} value={id_empre}>{nombre_empre}</option>
@@ -160,9 +249,33 @@ export const ConsultarUsuarios = () =>{
                     </SelectCrud>
                 </ContenedorInputCrud>
 
+                <ContenedorInputCrud>  
+                    <LabelCrud htmlFor="busqueda" name="Nombre de usuario"></LabelCrud>
+                    <InputTextCrud onChange={e=>setBusqueda(e.target.value )} id="busqueda" name="busqueda" />
+                </ContenedorInputCrud>
+
             </ContenedorFiltros>
 
-            <ListaUsuarios usuarios={usuarios}></ListaUsuarios>
+            <ContenedorBtnAccion>
+                <BtnAccion name="Limpiar filtros" onClick={handleLimpiarFiltros}></BtnAccion>
+            </ContenedorBtnAccion>
+
+            <ListaCard>
+                {usuarios.map(({_id_usua, _nombre_usua, _apellido_usua, _nombre_rol, _estado_usua, _numero_documento_usua, _abreviatura_tipo_docu})=>{
+                    return(
+                        <UserCard
+                        key={_id_usua}
+                        id_usua={_id_usua}
+                        nombre_usua={_nombre_usua} 
+                        apellido_usua={_apellido_usua}
+                        nombre_rol={_nombre_rol}
+                        estado_usua={_estado_usua? "Activo":"Inactivo"}
+                        numero_documento_usua={_numero_documento_usua}
+                        abreviatura_tipo_docu={_abreviatura_tipo_docu}></UserCard>
+                    )
+                })}
+            </ListaCard>
+            
             
         </>
         
