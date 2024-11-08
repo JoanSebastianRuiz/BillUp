@@ -1,6 +1,7 @@
 const { ejecutarQuery, finalizarPool } = require("./conexion");
 
 const express = require("express");
+const path = require('path');
 
 const app = express();
 app.use(express.json());
@@ -117,8 +118,8 @@ app.post("/usuarios", async(req,res)=>{
     res.send(JSON.stringify(respuesta));
 });
 
-app.delete("/usuarios", async (req,res)=>{
-    const {id_usua} = req.body;
+app.delete("/usuarios/:id_usua", async (req,res)=>{
+    const {id_usua} = req.params;
     const respuesta = await ejecutarQuery(`SELECT eliminarUsuario($1);`, [id_usua]);
     res.json(respuesta);
 });
@@ -154,6 +155,13 @@ app.get("/empresas", async(req,res)=>{
     res.json(respuesta);
 });
 
+
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Redirigir todas las rutas a `index.html` (para manejar rutas en React)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 
 //Thunder client para peticiones

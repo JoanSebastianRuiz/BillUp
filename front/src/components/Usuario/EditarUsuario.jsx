@@ -10,10 +10,10 @@ export const EditarUsuario = () =>{
     return(
         <>
             <DatosInputUsuario 
-            parrafo="Ingrese los datos del usuario que desea editar"
+            parrafo="Modifique los datos del usuario que desea editar"
             id_usua={id_usua}
             classNumeroDocumento="order-first"
-            nameButton="Editar"
+            nameButton="Confirmar"
             functionButton={async ()=>{
                 putUsuario(id_usua);
                 }}></DatosInputUsuario>

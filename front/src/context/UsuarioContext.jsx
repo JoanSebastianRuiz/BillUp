@@ -292,19 +292,14 @@ export const UsuarioContextProvider = (props) =>{
         }
     }
 
-    const deleteUsuario = async (id) =>{
-        const url = "http://localhost:5000/usuarios";
+    const deleteUsuario = async (id_usua) =>{
+        const url = `http://localhost:5000/usuarios/${id_usua}`;
         const cabeceras = new Headers();
         cabeceras.set("Content-type", "application/json");
 
-        const body = {
-            "id": id
-        }
-
         const opciones = {
             method: "DELETE",
-            headers: cabeceras,
-            body: JSON.stringify(body)
+            headers: cabeceras
         }
 
         try{
@@ -373,7 +368,8 @@ export const UsuarioContextProvider = (props) =>{
                 validarUsuario,
                 getUsuarios,
                 getUsuarioId,
-                putUsuario
+                putUsuario,
+                deleteUsuario
             }
         }>
             {props.children}

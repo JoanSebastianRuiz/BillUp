@@ -14,6 +14,7 @@ import { InputTextCrud } from "../ElementosForm/InputTextCrud";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { BtnAccion } from "../Buttons/BtnAccion";
+import { MenuPrincipal } from "../Menus/MenuPrincipal";
 
 export const ConsultarUsuarios = () =>{
     const [busqueda,setBusqueda]=useState("");
@@ -188,6 +189,7 @@ export const ConsultarUsuarios = () =>{
 
     return(
         <>
+            {/* <MenuPrincipal></MenuPrincipal> */}
             <MenuUsuario></MenuUsuario>
 
             <ParrafoCrud name="Seleccione los filtros que desea aplicar a la consulta de usuarios"></ParrafoCrud>

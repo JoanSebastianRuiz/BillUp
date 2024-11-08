@@ -4,6 +4,8 @@ import { faPlus, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icon
 import { ParrafoCard } from "../Text/ParrafoCard";
 import { TituloCard } from "../Text/TituloCard";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UsuarioContext } from "../../context/UsuarioContext";
 
 export const UserCard = ({id_usua, nombre_usua, apellido_usua, nombre_rol, estado_usua, numero_documento_usua, abreviatura_tipo_docu}) =>{
     const nombreSplit = nombre_usua.split(" ");
@@ -11,6 +13,12 @@ export const UserCard = ({id_usua, nombre_usua, apellido_usua, nombre_rol, estad
     const apellidoSplit = apellido_usua.split(" ");
     const primerApellido = apellidoSplit[0];
     const navigate = useNavigate();
+    const {deleteUsuario, usuarios, setUsuarios} = useContext(UsuarioContext);
+
+    const handleEliminarUsuario = () =>{
+        setUsuarios(usuarios.filter(({_id_usua})=>_id_usua!==id_usua));
+        deleteUsuario(id_usua);
+    }
 
     return(
         <>
@@ -23,8 +31,10 @@ export const UserCard = ({id_usua, nombre_usua, apellido_usua, nombre_rol, estad
 
                 <div className="flex w-full h-12 justify-around items-center">
                     <FontAwesomeIcon icon={faPlus} className="h-6 text-slate-800 hover:text-slate-500 transition-colors duration-500 font-black" />
+
                     <FontAwesomeIcon onClick={()=>navigate(`/usuarios/editar/${id_usua}`)} icon={faPenToSquare} className="h-6 text-slate-800 hover:text-slate-500 transition-colors duration-500" />
-                    <FontAwesomeIcon  icon={faTrash} className="h-6 text-slate-800 hover:text-slate-500 transition-colors duration-500" />
+
+                    <FontAwesomeIcon onClick={handleEliminarUsuario}  icon={faTrash} className="h-6 text-slate-800 hover:text-slate-500 transition-colors duration-500" />
                 </div>
             </li>
         </>
